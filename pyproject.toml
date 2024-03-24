@@ -26,20 +26,15 @@ ruff = "^0.3.4"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 120
-force-exclude = 'migrations'
-
 [tool.ruff]
+extend-exclude = [
+    '*.yml',
+    '*.sh',
+    '.log'
+]
 select = ["F", "E", "W", "C90",
     "I", "N", "S", "B", "A",
     "ISC", "T20", "Q", "PTH"]
-extend-exclude = [
-    'migrations',
-    'docker',
-    'database',
-    'logs,'
-]
 
 [tool.ruff.flake8-quotes]
 docstring-quotes = "double"

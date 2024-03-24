@@ -3,7 +3,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from app.core.utils import soft_delete_object, recover_object
+from app.core.utils import recover_object, soft_delete_object
 
 
 class CustomUserManager(BaseUserManager):
@@ -35,9 +35,16 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    """ User base model. """
+    """User base model."""
 
     username = None
+
+    email = models.EmailField(
+        'email',
+        null=False,
+        blank=False,
+        unique=True,
+    )
 
     updated_at = models.DateTimeField(
         'updated at',

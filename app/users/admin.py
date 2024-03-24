@@ -10,7 +10,7 @@ class UserAdmin(BaseAdminModel):
 
     list_display = (
         'id',
-        'username',
+        'email',
     )
 
     readonly_fields = (
@@ -37,7 +37,6 @@ class UserAdmin(BaseAdminModel):
              'fields':
                  (
                      (
-                         'username',
                          'email',
                      ),
                      (
@@ -79,7 +78,6 @@ class UserAdmin(BaseAdminModel):
              'fields':
                  (
                      (
-                         'username',
                          'email',
                      ),
                      (
