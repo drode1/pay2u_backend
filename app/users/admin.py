@@ -37,7 +37,6 @@ class UserAdmin(BaseAdminModel):
              'fields':
                  (
                      (
-                         'username',
                          'email',
                      ),
                      (
@@ -79,7 +78,6 @@ class UserAdmin(BaseAdminModel):
              'fields':
                  (
                      (
-                         'username',
                          'email',
                      ),
                      (
