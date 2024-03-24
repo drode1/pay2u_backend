@@ -360,5 +360,5 @@ GitHub.sublime-settings
 
 .ruff_cache/
 database/
-app/static
-app/media
+app/static/*
+app/media/*
