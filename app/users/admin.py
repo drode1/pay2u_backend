@@ -1,4 +1,6 @@
 from django.contrib import admin
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
+from phonenumber_field.modelfields import PhoneNumberField
 
 from app.core.admin import BaseAdminModel
 from app.users.models import User
@@ -10,7 +12,7 @@ class UserAdmin(BaseAdminModel):
 
     list_display = (
         'id',
-        'username',
+        'email',
     )
 
     readonly_fields = (
@@ -37,12 +39,13 @@ class UserAdmin(BaseAdminModel):
              'fields':
                  (
                      (
-                         'username',
                          'email',
+                         'phone'
                      ),
                      (
                          'first_name',
                          'last_name',
+                         'patronymic',
                      ),
                  ),
          }),
@@ -79,12 +82,13 @@ class UserAdmin(BaseAdminModel):
              'fields':
                  (
                      (
-                         'username',
                          'email',
+                         'phone',
                      ),
                      (
                          'first_name',
                          'last_name',
+                         'patronymic',
                      ),
                  ),
          }),
@@ -97,6 +101,9 @@ class UserAdmin(BaseAdminModel):
              ),
          }),
     )
+    formfield_overrides = {
+        PhoneNumberField: {'widget': PhoneNumberPrefixWidget},
+    }
 
     def get_fieldsets(self, request, obj=None):
         if not obj:

@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from faker import Faker
@@ -15,12 +16,15 @@ CSRF_TRUSTED_ORIGINS: list = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://loca
 LOCAL_APPS = [
     'app.core.apps.CoreConfig',
     'app.users.apps.UsersConfig',
+    'app.auth_jwt.apps.AuthConfig',
+    'app.subscriptions.apps.SubscriptionsConfig',
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
     'django_json_widget',
     'corsheaders',
+    'phonenumber_field',
 ]
 
 INSTALLED_APPS = [
@@ -79,6 +83,7 @@ DATABASES = {
     },
 }
 
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -123,3 +128,18 @@ from config.settings.rest_framework import *  # noqa
 from config.settings.email import *  # noqa
 
 Faker._DEFAULT_LOCALE = 'ru_RU'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}

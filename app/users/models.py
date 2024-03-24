@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 from app.core.utils import soft_delete_object, recover_object
 
@@ -39,6 +40,41 @@ class User(AbstractUser):
 
     username = None
 
+    email = models.EmailField(
+        'email address',
+        unique=True
+    )
+
+    first_name = models.CharField(
+        'first name',
+        max_length=20,
+        blank=False,
+        null=False
+    )
+    last_name = models.CharField(
+        'last name',
+        max_length=20,
+        blank=False,
+        null=False
+    )
+    patronymic = models.CharField(
+        'patronymic',
+        max_length=20,
+        blank=False,
+        null=False
+    )
+    notification_date = models.DateField(
+        'notification date',
+        auto_now=True,
+        blank=False,
+        null=False
+    )
+    phone = PhoneNumberField(
+        'phone number',
+        blank=False,
+        null=False
+    )
+
     updated_at = models.DateTimeField(
         'updated at',
         auto_now=True,
@@ -54,13 +90,16 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = (
-        # TODO Дописать нужными полями
+        'first_name',
+        'last_name',
+        'patronymic',
+        'phone'
     )
 
     class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
-        db_table = 'users'
+        verbose_name = 'Client'
+        verbose_name_plural = 'Clients'
+        db_table = 'client'
         ordering = (
             'id',
             'email',

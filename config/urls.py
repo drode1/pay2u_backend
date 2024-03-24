@@ -3,11 +3,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from app.scores.api.urls import score_patterns
+# from app.scores.api.urls import score_patterns
+from app.auth_jwt.api.urls import token_urlpatterns
+from app.users.api.urls import user_patterns
 
 api_v1_patterns = [
+    path('', include((token_urlpatterns, 'auth_jwt'))),
     # TODO Здесь список роутов + указание на приложения
-    path('users/', include((user_patterns, 'users'))),
+    path('client/', include((user_patterns, 'users'))),
 ]
 
 urlpatterns = [
