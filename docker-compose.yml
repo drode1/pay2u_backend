@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./database/postgres-data:/var/lib/postgresql/data
+    ports:
+      - "${FORWARD_DB_PORT:-5432}:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${DB_NAME}'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - default
+
+  django:
+    build:
+      context: ./
+      dockerfile: ./docker/local.Dockerfile
+    restart: on-failure
+    command: bash docker/web_entrypoint.sh
+    ports:
+      - '${APP_PORT:-8000}:8000'
+    volumes:
+      - './:/app'
+    env_file:
+      - ./.env
+    container_name: django
+    depends_on:
+      - postgres
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
