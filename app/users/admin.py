@@ -10,7 +10,7 @@ class UserAdmin(BaseAdminModel):
 
     list_display = (
         'id',
-        'username',
+        'email',
     )
 
     readonly_fields = (
