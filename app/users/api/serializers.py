@@ -17,7 +17,7 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
             'notification_date',
             'phone',
             'count_sub',
-            'cashback_mounth'
+            'cashback_mounth',
         )
 
     def get_count_sub(self, obj):
