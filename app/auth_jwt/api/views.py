@@ -7,7 +7,7 @@ from rest_framework import status
 
 from app.auth_jwt.api.serializers import TokenSerializer
 
-User = get_user_model()
+from app.users.models import User
 
 
 class TokenCreateView(CreateAPIView):
