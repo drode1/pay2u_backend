@@ -95,7 +95,7 @@ class User(AbstractUser):
         'first_name',
         'last_name',
         'patronymic',
-        'phone'
+        'phone',
     )
 
     class Meta:
