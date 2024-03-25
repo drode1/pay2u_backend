@@ -2,7 +2,7 @@ name: Workflow
 on:
   push:
     branches:
-      - 'main-github-workflow'
+      - 'main'
 
 jobs:
   Tests:
