@@ -28,7 +28,6 @@ services:
       - './:/var/www/html'
     env_file:
       - ./.env
-    container_name: django
     depends_on:
       - postgres
     networks:
@@ -44,7 +43,6 @@ services:
       - ./app/media/:/var/www/html/media/
     depends_on:
       - django
-    container_name: nginx
     networks:
       - default
 

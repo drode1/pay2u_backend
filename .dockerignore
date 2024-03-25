@@ -1,13 +1,14 @@
-db.sqlite3
 __pycache__
 *.log
-database/
+database
 .gitignore
 .pre-commit-config.yaml
 README.md
 .DS_Store
-docker-compose.yml
 .idea
 .git
 .ruff_cache
 .github
+app/static/*
+app/media/*
+.env.example
