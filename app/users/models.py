@@ -41,7 +41,7 @@ class User(AbstractUser):
     username = None
 
     email = models.EmailField(
-        'email address',
+        'email',
         unique=True
     )
 
