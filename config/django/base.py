@@ -6,6 +6,7 @@ from faker import Faker
 
 from app.core.utils import real_bool
 from config.env import APPS_DIR
+from config.settings import jwt
 
 SECRET_KEY: str = os.environ.get('SECRET_KEY', 'test-key')
 
@@ -128,18 +129,3 @@ from config.settings.rest_framework import *  # noqa
 from config.settings.email import *  # noqa
 
 Faker._DEFAULT_LOCALE = 'ru_RU'
-
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-}
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'AUTH_HEADER_TYPES': ('Bearer',),
-}

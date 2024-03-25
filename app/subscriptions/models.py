@@ -1,11 +1,14 @@
 from django.db import models
 
+from app.core.models import BaseModel
+
 
 class Category(BaseModel):
 
     name = models.TextField(
-        'category name',
-        null=False
+        'Name',
+        null=False,
+        blank=False
     )
 
     class Meta:
@@ -27,8 +30,9 @@ class Category(BaseModel):
 class Cashback(BaseModel):
 
     amount = models.FloatField(
-        'cashback amount',
-        null=False
+        'Amount',
+        null=False,
+        blank=False
     )
 
     class Meta:
@@ -50,14 +54,15 @@ class Cashback(BaseModel):
 class Invoice(BaseModel):
 
     amount = models.FloatField(
-        'invoice amount',
-        null=False
+        'Amount',
+        null=False,
+        blank=False
     )
     date = models.DateTimeField(
-        'invoice date',
+        'Date',
         auto_now=True,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False
     )
 
     class Meta:

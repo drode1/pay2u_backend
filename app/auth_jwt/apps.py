@@ -4,4 +4,4 @@ from django.apps import AppConfig
 class AuthConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'app.auth_jwt'
-    verbose_name = 'AuthJWT'
+    verbose_name = 'JWT Auth'

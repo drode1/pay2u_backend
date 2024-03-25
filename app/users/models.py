@@ -51,30 +51,30 @@ class User(AbstractUser):
         'First name',
         max_length=20,
         blank=False,
-        null=False
+        null=False,
     )
     last_name = models.CharField(
-        'last name',
+        'Last name',
         max_length=20,
         blank=False,
-        null=False
+        null=False,
     )
     patronymic = models.CharField(
-        'patronymic',
+        'Patronymic',
         max_length=20,
         blank=False,
-        null=False
+        null=False,
     )
     notification_date = models.DateField(
-        'notification date',
+        'Notification date',
         auto_now=True,
         blank=False,
-        null=False
+        null=False,
     )
     phone = PhoneNumberField(
         'phone number',
         blank=False,
-        null=False
+        null=False,
     )
 
     updated_at = models.DateTimeField(
