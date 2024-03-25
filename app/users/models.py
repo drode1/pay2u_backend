@@ -48,7 +48,7 @@ class User(AbstractUser):
     )
 
     first_name = models.CharField(
-        'first name',
+        'First name',
         max_length=20,
         blank=False,
         null=False
