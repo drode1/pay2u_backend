@@ -24,7 +24,7 @@ class Category(BaseModel):
         return self.name
 
 
-class Cashback(models.Model):
+class Cashback(BaseModel):
 
     amount = models.FloatField(
         'cashback amount',
