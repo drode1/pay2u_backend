@@ -3,7 +3,7 @@ FROM python:3.12.2-slim
 ENV PYTHONUNBUFFERED=0 \
     POETRY_VERSION=1.8.2 \
     POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_VIRTUALENVS_CREATE=true \
     POETRY_CACHE_DIR='/var/cache/pypoetry' \
     POETRY_HOME='/usr/local'
 
@@ -22,6 +22,6 @@ WORKDIR $WORKDIR
 COPY ../poetry.lock ../pyproject.toml $WORKDIR
 
 RUN --mount=type=cache,target="$POETRY_CACHE_DIR" \
-    /usr/local/bin/poetry install --no-interaction --no-ansi --no-root
+    /usr/local/bin/poetry install --no-interaction --no-ansi --no-root  --without dev
 
 COPY . $WORKDIR
