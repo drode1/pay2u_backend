@@ -8,7 +8,7 @@ from app.auth_jwt.api.urls import token_urlpatterns
 from app.users.api.urls import user_patterns
 
 api_v1_patterns = [
-    path('', include((token_urlpatterns, 'auth_jwt'))),
+    path('login/', include((token_urlpatterns, 'auth_jwt'))),
     # TODO Здесь список роутов + указание на приложения
     path('client/', include((user_patterns, 'users'))),
 ]
