@@ -42,7 +42,9 @@ class User(AbstractUser):
 
     email = models.EmailField(
         'email',
-        unique=True
+        unique=True,
+        blank=False,
+        null=False,
     )
 
     first_name = models.CharField(
