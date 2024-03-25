@@ -1,27 +1,28 @@
 FROM python:3.12.2-slim
 
-ENV PYTHONUNBUFFERED=0 \
+ENV PYTHONUNBUFFERED=1 \
     POETRY_VERSION=1.8.2 \
     POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_CREATE=true \
+    POETRY_VIRTUALENVS_CREATE=false \
     POETRY_CACHE_DIR='/var/cache/pypoetry' \
-    POETRY_HOME='/usr/local'
-
-ENV PATH="/root/.local/bin:$PATH"
-
-WORKDIR /var/www/html
+    POETRY_HOME='/usr/local' \
+    PATH="/root/.local/bin:$PATH"
 
 RUN apt-get update && \
     apt-get install -y curl --no-install-recommends && \
-    curl -sSL https://install.python-poetry.org | python - && \
+    curl -sSL https://install.python-poetry.org | python3 - && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /var/www/html
 
-WORKDIR $WORKDIR
-COPY ../poetry.lock ../pyproject.toml $WORKDIR
+COPY ../poetry.lock ../pyproject.toml ./
 
-RUN --mount=type=cache,target="$POETRY_CACHE_DIR" \
-    /usr/local/bin/poetry install --no-interaction --no-ansi --no-root  --without dev
+RUN $POETRY_HOME/bin/poetry install --no-interaction --no-ansi --no-root
 
-COPY . $WORKDIR
+COPY . .
+
+RUN chmod a+x ./docker/web_entrypoint.sh &&  \
+    sed -i 's/\r$//g' './docker/web_entrypoint.sh'
+
+ENTRYPOINT ["./docker/web_entrypoint.sh"]
