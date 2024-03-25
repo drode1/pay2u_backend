@@ -47,7 +47,7 @@ class Cashback(BaseModel):
         return f'Cashback {self.amount}'
 
 
-class Invoice(models.Model):
+class Invoice(BaseModel):
 
     amount = models.FloatField(
         'invoice amount',
