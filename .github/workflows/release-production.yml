@@ -86,8 +86,8 @@ jobs:
           script: |
             cd ./projects/pay2u_backend/
             sudo docker compose stop
-            sudo docker compose rm pay2u_backend-django-1
-            sudo docker image rm pay2u_backend-django
+            sudo docker compose rm django
+            sudo docker image rm pay2u_backend
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/pay2u_backend
             sudo docker compose up -d
             sudo docker compose start
