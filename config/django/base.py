@@ -3,14 +3,13 @@ from pathlib import Path
 
 from faker import Faker
 
-from app.core.utils import real_bool
 from config.env import APPS_DIR
 
 SECRET_KEY: str = os.environ.get('SECRET_KEY', 'test-key')
 
-DEBUG: bool = real_bool(os.environ.get('DEBUG', False))
+DEBUG: bool = os.environ.get('DEBUG', False)
 ALLOWED_HOSTS: list = os.environ.get('ALLOWED_HOSTS', '*').split(',')
-CSRF_TRUSTED_ORIGINS: list = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost').split(',')
+CSRF_TRUSTED_ORIGINS: list = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost').split(',')  # noqa: E501
 
 LOCAL_APPS = [
     'app.core.apps.CoreConfig',
@@ -84,8 +83,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-        # noqa: E501
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', # noqa: E501
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
