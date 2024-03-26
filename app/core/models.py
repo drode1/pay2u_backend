@@ -1,9 +1,6 @@
 from django.db import models
 
-from app.core.utils import (
-    soft_delete_object,
-    recover_object
-)
+from app.core.utils import recover_object, soft_delete_object
 
 
 class BaseModel(models.Model):
@@ -21,6 +18,12 @@ class BaseModel(models.Model):
     @property
     def is_deleted(self):
         return True if self.deleted_at else False
+
+    def __repr__(self):
+        return f'{self.__class__.__name__} {self.id}'
+
+    def __str__(self):
+        return self.id
 
     def soft_delete(self):
         return soft_delete_object(self)
