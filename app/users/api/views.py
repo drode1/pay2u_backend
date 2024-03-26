@@ -11,6 +11,7 @@ class DetailUserApi(RetrieveApiView):
 
     queryset = User.objects.all()
     serializer_class = UserReadOutputSerializer
+    lookup_field = 'pk'
 
 
 class DetailUserMeAPI(RetrieveApiView):

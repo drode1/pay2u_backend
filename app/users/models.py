@@ -2,8 +2,10 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 from app.core.utils import recover_object, soft_delete_object
+from config.django.base import MAX_NAME_LENGTH
 
 
 class CustomUserManager(BaseUserManager):
@@ -41,9 +43,39 @@ class User(AbstractUser):
 
     email = models.EmailField(
         'email',
-        null=False,
-        blank=False,
         unique=True,
+        blank=False,
+        null=False,
+    )
+
+    first_name = models.CharField(
+        'First name',
+        max_length=MAX_NAME_LENGTH,
+        blank=False,
+        null=False,
+    )
+    last_name = models.CharField(
+        'Last name',
+        max_length=MAX_NAME_LENGTH,
+        blank=False,
+        null=False,
+    )
+    patronymic = models.CharField(
+        'Patronymic',
+        max_length=MAX_NAME_LENGTH,
+        blank=False,
+        null=False,
+    )
+    notification_date = models.DateField(
+        'Notification date',
+        auto_now=True,
+        blank=False,
+        null=False,
+    )
+    phone = PhoneNumberField(
+        'phone number',
+        blank=False,
+        null=False,
     )
 
     updated_at = models.DateTimeField(
@@ -61,13 +93,16 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = (
-        # TODO Дописать нужными полями
+        'first_name',
+        'last_name',
+        'patronymic',
+        'phone',
     )
 
     class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
-        db_table = 'users'
+        verbose_name = 'Client'
+        verbose_name_plural = 'Clients'
+        db_table = 'clients'
         ordering = (
             'id',
             'email',
