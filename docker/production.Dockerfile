@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED=1 \
     PATH="/root/.local/bin:$PATH"
 
 RUN apt-get update && \
-    apt-get install -y curl --no-install-recommends && \
+    apt-get install -y curl make --no-install-recommends && \
     curl -sSL https://install.python-poetry.org | python3 - && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     apt-get clean -y && rm -rf /var/lib/apt/lists/*
