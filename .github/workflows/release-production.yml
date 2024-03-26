@@ -1,8 +1,7 @@
-name: Workflow
+name: "Release to production"
 on:
-  push:
-    branches:
-      - 'main'
+  release:
+    types: [ published ]
 
 jobs:
   Tests:
@@ -87,7 +86,7 @@ jobs:
             cd ./projects/pay2u_backend/
             sudo docker compose stop
             sudo docker compose rm django
-            sudo docker image rm pay2u_backend
+            sudo docker image rm pay2u_backend-django-1
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/pay2u_backend
             sudo docker compose up -d
             sudo docker compose start
