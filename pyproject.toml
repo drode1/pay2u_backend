@@ -32,7 +32,8 @@ build-backend = "poetry.core.masonry.api"
 extend-exclude = [
     '*.yml',
     '*.sh',
-    '.log'
+    '.log',
+    'migrations'
 ]
 select = ["F", "E", "W", "C90",
     "I", "N", "S", "B", "A",
