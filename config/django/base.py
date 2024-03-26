@@ -14,12 +14,15 @@ CSRF_TRUSTED_ORIGINS: list = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://loca
 LOCAL_APPS = [
     'app.core.apps.CoreConfig',
     'app.users.apps.UsersConfig',
+    'app.auth_jwt.apps.AuthConfig',
+    'app.subscriptions.apps.SubscriptionsConfig',
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
     'django_json_widget',
     'corsheaders',
+    'phonenumber_field',
 ]
 
 INSTALLED_APPS = [
@@ -78,6 +81,7 @@ DATABASES = {
     },
 }
 
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -114,6 +118,8 @@ MEDIA_ROOT = Path(APPS_DIR) / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 DEFAULT_MAX_LENGTH_FIELD = 255
+MAX_NAME_LENGTH = 20
+MAX_EMAIL_LENGTH = 40
 
 from config.settings.logs import *  # noqa
 from config.settings.cors import *  # noqa
