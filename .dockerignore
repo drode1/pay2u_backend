@@ -12,3 +12,4 @@ README.md
 app/static/*
 app/media/*
 .env.example
+.env
