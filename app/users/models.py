@@ -4,8 +4,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from app.core.utils import soft_delete_object, recover_object
-from config.django.base import MAX_NAME_LENGTH, MAX_EMAIL_LENGTH
+from app.core.utils import recover_object, soft_delete_object
+from config.django.base import MAX_NAME_LENGTH
 
 
 class CustomUserManager(BaseUserManager):
@@ -37,13 +37,12 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    """ User base model. """
+    """User base model."""
 
     username = None
 
     email = models.EmailField(
         'email',
-        max_length=MAX_EMAIL_LENGTH,
         unique=True,
         blank=False,
         null=False,
@@ -103,7 +102,7 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
-        db_table = 'client'
+        db_table = 'clients'
         ordering = (
             'id',
             'email',

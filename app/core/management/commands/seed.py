@@ -7,8 +7,6 @@ from app.users.factories import (
     UserAdminFactory,
 )
 from app.users.models import User
-from app.scores.factories import ScoreFactory
-from app.scores.models import Score
 
 logger = logging.getLogger()
 
@@ -18,10 +16,9 @@ class Command(BaseCommand):
 
     FACTORIES = {
         UserAdminFactory: 1,
-        ScoreFactory: 15,
     }
 
-    MODELS = (User, Score)
+    MODELS = [User]
 
     def clean_db(self, models: [Model]) -> None:
         for model in models:

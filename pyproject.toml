@@ -9,7 +9,6 @@ readme = "README.md"
 python = "^3.11"
 django = "4.2"
 djangorestframework = "^3.14.0"
-python-dotenv = "^1.0.0"
 django-json-widget = "^1.1.1"
 psycopg2-binary = "^2.9.9"
 django-cors-headers = "^4.3.1"
@@ -18,8 +17,8 @@ djangorestframework-simplejwt = "^5.3.1"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "^7.3.0"}
 babel = "^2.14.0"
 
-
 [tool.poetry.group.dev.dependencies]
+python-dotenv = "^1.0.0"
 pre-commit = "^3.6.2"
 factory-boy = "^3.3.0"
 black = "^24.3.0"
@@ -29,20 +28,15 @@ ruff = "^0.3.4"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 120
-force-exclude = 'migrations'
-
 [tool.ruff]
+extend-exclude = [
+    '*.yml',
+    '*.sh',
+    '.log'
+]
 select = ["F", "E", "W", "C90",
     "I", "N", "S", "B", "A",
     "ISC", "T20", "Q", "PTH"]
-extend-exclude = [
-    'migrations',
-    'docker',
-    'database',
-    'logs,'
-]
 
 [tool.ruff.flake8-quotes]
 docstring-quotes = "double"
