@@ -9,16 +9,17 @@ from app.core.services import get_user_by_id, get_tokens
 
 class TokenCreateView(CreateAPIView):
     permission_classes = (AllowAny,)
+    serializer_class = TokenOutputSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = TokenOutputSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = get_user_by_id(request.data.get('id'))
         refresh_token, access_token = get_tokens(user)
         return Response(
             {
                 'refresh': str(refresh_token),
-                'access': str(refresh_token)
+                'access': str(access_token)
             },
             status=status.HTTP_201_CREATED
         )

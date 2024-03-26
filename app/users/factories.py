@@ -1,10 +1,8 @@
 from django.contrib.auth.hashers import make_password
-from factory import django
-from faker import Faker
+from factory import django, Faker
 
 from app.users.models import User
 
-fake = Faker('ru_RU')
 
 class UserAdminFactory(django.DjangoModelFactory):
     class Meta:
@@ -24,11 +22,11 @@ class UserFactory(django.DjangoModelFactory):
     class Meta:
         model = User
 
-    first_name = fake.first_name()
-    last_name = 'test'
-    patronymic = 'test'
-    phone = '+79991112234'
-    email = 'test@test.ru'
+    first_name = Faker('first_name_male')
+    last_name = Faker('last_name_male')
+    patronymic = Faker('middle_name_male')
+    phone = Faker('phone_number')
+    email = Faker('email')
     password = make_password('test')
     is_staff = False
     is_superuser = False

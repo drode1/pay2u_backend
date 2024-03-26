@@ -67,12 +67,6 @@ class User(AbstractUser):
         blank=False,
         null=False,
     )
-    notification_date = models.DateField(
-        'Notification date',
-        auto_now=True,
-        blank=False,
-        null=False,
-    )
     phone = PhoneNumberField(
         'phone number',
         blank=False,

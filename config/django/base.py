@@ -2,8 +2,8 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-from faker import Faker
-
+# from faker import Faker
+import factory
 from app.core.utils import real_bool
 from config.env import APPS_DIR
 
@@ -131,4 +131,4 @@ from config.settings.rest_framework import *  # noqa
 from config.settings.email import *  # noqa
 from config.settings.jwt import *  # noqa
 
-Faker._DEFAULT_LOCALE = 'ru_RU'
+factory.Faker._DEFAULT_LOCALE = 'ru_RU'
