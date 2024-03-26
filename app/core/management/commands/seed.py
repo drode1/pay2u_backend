@@ -4,11 +4,9 @@ from django.core.management.base import BaseCommand
 from django.db.models import Model
 
 from app.users.factories import (
-    UserAdminFactory,
+    UserAdminFactory, UserFactory
 )
 from app.users.models import User
-from app.scores.factories import ScoreFactory
-from app.scores.models import Score
 
 logger = logging.getLogger()
 
@@ -18,10 +16,10 @@ class Command(BaseCommand):
 
     FACTORIES = {
         UserAdminFactory: 1,
-        ScoreFactory: 15,
+        UserFactory: 1,
     }
 
-    MODELS = (User, Score)
+    MODELS = (User,)
 
     def clean_db(self, models: [Model]) -> None:
         for model in models:

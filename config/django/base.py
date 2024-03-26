@@ -6,7 +6,7 @@ from faker import Faker
 
 from app.core.utils import real_bool
 from config.env import APPS_DIR
-from config.settings import jwt
+
 
 SECRET_KEY: str = os.environ.get('SECRET_KEY', 'test-key')
 
@@ -127,5 +127,6 @@ from config.settings.logs import *  # noqa
 from config.settings.cors import *  # noqa
 from config.settings.rest_framework import *  # noqa
 from config.settings.email import *  # noqa
+from config.settings.jwt import *  # noqa
 
 Faker._DEFAULT_LOCALE = 'ru_RU'
