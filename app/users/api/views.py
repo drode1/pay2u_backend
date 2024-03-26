@@ -25,13 +25,3 @@ class DetailUserMeAPI(RetrieveApiView):
         instance = request.user
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-# class UserDetailView(APIView):
-#     def get(self, request, pk):
-#         try:
-#             user = User.objects.get(pk=pk)
-#             serializer = UserSerializer(user)
-#             return Response(serializer.data)
-#         except User.DoesNotExist:
-#             return Response(status=status.HTTP_404_NOT_FOUND)

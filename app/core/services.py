@@ -1,24 +1,13 @@
-from rest_framework import status
-from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from app.users.models import User
 
 
-def get_user_by_id(request):
-    try:
-        user = User.objects.get(id=request.data.get('id'))
-
-    except User.DoesNotExist:
-        return Response(
-            {'user': 'Not Found'},
-            status=status.HTTP_404_NOT_FOUND
-        )
-    return user
+def get_user_by_id(user_id: int):
+    return get_object_or_404(User, id=user_id)
 
 
-def get_token(user):
+def get_tokens(user: User):
     token = RefreshToken.for_user(user)
-    return Response({'refresh': str(token),
-                     'access': str(token.access_token)},
-                    status=status.HTTP_201_CREATED)
+    return token, token.access_token

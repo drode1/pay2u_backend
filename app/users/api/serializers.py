@@ -5,7 +5,7 @@ from app.users.models import User
 
 class UserReadOutputSerializer(serializers.ModelSerializer):
     count_sub = serializers.SerializerMethodField()
-    cashback_mounth = serializers.SerializerMethodField()
+    cashback_month = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -22,8 +22,8 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
 
     def get_count_sub(self, obj):
         # Пока не знаю, что это за поля
-        return 0
+        raise NotImplemented
 
-    def get_cashback_mounth(self, obj):
+    def get_cashback_month(self, obj):
         # Пока не знаю, что это за поля
-        return 0
+        raise NotImplemented

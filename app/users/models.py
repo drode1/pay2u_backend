@@ -5,6 +5,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from app.core.utils import soft_delete_object, recover_object
+from config.django.base import MAX_NAME_LENGTH, MAX_EMAIL_LENGTH
 
 
 class CustomUserManager(BaseUserManager):
@@ -42,6 +43,7 @@ class User(AbstractUser):
 
     email = models.EmailField(
         'email',
+        max_length=MAX_EMAIL_LENGTH,
         unique=True,
         blank=False,
         null=False,
@@ -49,19 +51,19 @@ class User(AbstractUser):
 
     first_name = models.CharField(
         'First name',
-        max_length=20,
+        max_length=MAX_NAME_LENGTH,
         blank=False,
         null=False,
     )
     last_name = models.CharField(
         'Last name',
-        max_length=20,
+        max_length=MAX_NAME_LENGTH,
         blank=False,
         null=False,
     )
     patronymic = models.CharField(
         'Patronymic',
-        max_length=20,
+        max_length=MAX_NAME_LENGTH,
         blank=False,
         null=False,
     )
