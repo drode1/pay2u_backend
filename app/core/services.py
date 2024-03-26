@@ -10,4 +10,4 @@ def get_user_by_id(user_id: int) -> User:
 
 def get_tokens_for_user(user: User) -> tuple[Token, Token]:
     refresh = RefreshToken.for_user(user)
-    return refresh, refresh.token
+    return refresh, refresh.access_token
