@@ -3,13 +3,21 @@ import logging
 from django.core.management.base import BaseCommand
 from django.db.models import Model
 
-from app.subscriptions.factories import CategoryFactory, CashbackFactory, \
+from app.subscriptions.factories import (
+    CategoryFactory,
+    CashbackFactory,
     InvoiceFactory
+)
 from app.users.factories import (
-    UserAdminFactory, UserFactory
+    UserAdminFactory,
+    UserFactory
 )
 from app.users.models import User
-from app.subscriptions.models import Category, Cashback, Invoice
+from app.subscriptions.models import (
+    Category,
+    Cashback,
+    Invoice
+)
 
 logger = logging.getLogger()
 

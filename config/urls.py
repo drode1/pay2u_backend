@@ -8,9 +8,18 @@ from app.subscriptions.api.urls import subscriptions_urlpatterns
 from app.users.api.urls import user_patterns
 
 api_v1_patterns = [
-    path('login/', include((token_urlpatterns, 'auth_jwt'))),
-    path('client/', include((user_patterns, 'users'))),
-    path('subscriptions/', include((subscriptions_urlpatterns, 'subscriptions')))
+    path(
+        'login/',
+        include((token_urlpatterns, 'auth_jwt'))
+    ),
+    path(
+        'client/',
+        include((user_patterns, 'users'))
+    ),
+    path(
+        'subscriptions/',
+        include((subscriptions_urlpatterns, 'subscriptions'))
+    )
 ]
 
 urlpatterns = [

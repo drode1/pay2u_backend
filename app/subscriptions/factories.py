@@ -1,4 +1,4 @@
-from factory import django, Faker
+from factory import django, Faker, Iterator
 
 from app.subscriptions.models import Category, Cashback, Invoice
 
@@ -8,9 +8,13 @@ class CategoryFactory(django.DjangoModelFactory):
     class Meta:
         model = Category
 
-    name = Faker(
-        'random_element',
-        elements=('Музыка', 'Фильмы', 'Игры', 'Книги')
+    name = Iterator(
+        (
+            'Музыка',
+            'Фильмы',
+            'Игры',
+            'Книги',
+        )
     )
 
 
