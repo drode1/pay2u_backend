@@ -1,4 +1,4 @@
-from factory import Faker, Iterator, SubFactory, django, fuzzy
+from factory import Faker, Iterator, django, fuzzy
 
 from app.subscriptions.models import (
     Cashback,
@@ -73,8 +73,14 @@ class SubscriptionFactory(django.DjangoModelFactory):
         )
     )
     description = Faker('sentence')
-    cashback = SubFactory(CashbackFactory)
-    category = SubFactory(CategoryFactory)
+    cashback = fuzzy.FuzzyChoice(
+        Cashback.objects.all(),
+        getter=lambda c: c
+    )
+    category = fuzzy.FuzzyChoice(
+        Category.objects.all(),
+        getter=lambda c: c
+    )
     is_recommended = Faker('pybool', truth_probability=70)
     image = Faker('image_url', width=88, height=88)
 
@@ -92,8 +98,14 @@ class TariffFactory(django.DjangoModelFactory):
         ),
         getter=lambda c: c
     )
-    subscription = SubFactory(SubscriptionFactory)
-    promocode = SubFactory(PromocodeFactory)
+    subscription = fuzzy.FuzzyChoice(
+        Subscription.objects.all(),
+        getter=lambda c: c
+    )
+    promocode = fuzzy.FuzzyChoice(
+        Promocode.objects.all(),
+        getter=lambda c: c
+    )
     amount = fuzzy.FuzzyChoice(
         (
             99,
