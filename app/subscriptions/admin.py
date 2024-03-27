@@ -12,15 +12,27 @@ class CategoryAdmin(BaseAdminModel):
     )
 
     search_fields = ('name',)
-    search_help_text = 'Fiend by name'
+    search_help_text = 'Find by name'
     fieldsets = (
-        ('General', {
-            'classes': ('wide',),
-            'fields': ('name',),
-        }),
-        ('Additional Information', {
-            'fields': ('created_at', 'updated_at', 'deleted_at'),
-        }),
+        (
+            'General', {
+                'classes': (
+                    'wide',
+                ),
+                'fields': (
+                    'name',
+                ),
+            }
+        ),
+        (
+            'Additional Information', {
+                'fields': (
+                    'created_at',
+                    'updated_at',
+                    'deleted_at'
+                ),
+            }
+        ),
     )
 
 
@@ -32,15 +44,27 @@ class CashbackAdmin(BaseAdminModel):
     )
 
     search_fields = ('amount',)
-    search_help_text = 'Fiend by amount'
+    search_help_text = 'Find by amount'
     fieldsets = (
-        ('General', {
-            'classes': ('wide',),
-            'fields': ('amount',),
-        }),
-        ('Additional Information', {
-            'fields': ('created_at', 'updated_at', 'deleted_at'),
-        }),
+        (
+            'General', {
+                'classes':
+                    ('wide',
+                     ),
+                'fields': (
+                    'amount',
+                ),
+            }
+        ),
+        (
+            'Additional Information', {
+                'fields': (
+                    'created_at',
+                    'updated_at',
+                    'deleted_at'
+                ),
+            }
+        ),
     )
 
 
@@ -50,17 +74,35 @@ class InvoiceAdmin(BaseAdminModel):
         'id',
         'amount',
     )
-    readonly_fields = ('date', 'amount', 'created_at', 'updated_at',)
+    readonly_fields = (
+        'date',
+        'amount',
+        'created_at',
+        'updated_at',
+    )
     search_fields = ('amount',)
-    search_help_text = 'Fiend by amount'
+    search_help_text = 'Find by amount'
     fieldsets = (
-        ('General', {
-            'classes': ('wide',),
-            'fields': ('amount', 'date',),
-        }),
-        ('Additional Information', {
-            'fields': ('created_at', 'updated_at', 'deleted_at'),
-        }),
+        (
+            'General', {
+                'classes': (
+                    'wide',
+                ),
+                'fields': (
+                    'amount',
+                    'date',
+                ),
+            }
+        ),
+        (
+            'Additional Information', {
+                'fields': (
+                    'created_at',
+                    'updated_at',
+                    'deleted_at'
+                ),
+            }
+        ),
     )
 
     def has_add_permission(self, request):

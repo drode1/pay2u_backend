@@ -3,13 +3,10 @@ import logging
 from django.core.management.base import BaseCommand
 from django.db.models import Model
 
-from app.subscriptions.factories import CategoryFactory, CashbackFactory, \
-    InvoiceFactory
-from app.users.factories import (
-    UserAdminFactory, UserFactory
-)
+from app.subscriptions.factories import CashbackFactory, CategoryFactory, InvoiceFactory
+from app.subscriptions.models import Cashback, Category, Invoice
+from app.users.factories import UserAdminFactory, UserFactory
 from app.users.models import User
-from app.subscriptions.models import Category, Cashback, Invoice
 
 logger = logging.getLogger()
 
@@ -25,7 +22,7 @@ class Command(BaseCommand):
         InvoiceFactory: 5,
     }
 
-    MODELS = (User, Category, Cashback, Invoice)
+    MODELS = (User, Category, Cashback, Invoice,)
 
     def clean_db(self, models: [Model]) -> None:
         for model in models:
