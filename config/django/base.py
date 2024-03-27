@@ -1,8 +1,6 @@
 import os
 from pathlib import Path
 
-import factory
-
 from config.env import APPS_DIR
 
 SECRET_KEY: str = os.environ.get('SECRET_KEY', 'test-key')
@@ -125,5 +123,3 @@ from config.settings.cors import *  # noqa
 from config.settings.rest_framework import *  # noqa
 from config.settings.email import *  # noqa
 from config.settings.jwt import *  # noqa
-
-factory.Faker._DEFAULT_LOCALE = 'ru_RU'
