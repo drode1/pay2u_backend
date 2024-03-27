@@ -144,7 +144,7 @@ class PromocodeAdmin(BaseAdminModel):
         (
             'General', {
                 'classes': (
-                    'pretty',
+                    'extrapretty',
                 ),
                 'fields': (
                     'is_active',
@@ -197,7 +197,7 @@ class SubscriptionAdmin(BaseAdminModel):
         (
             'General', {
                 'classes': (
-                    'pretty',
+                    'extrapretty',
                 ),
                 'fields': (
                     'is_recommended',
