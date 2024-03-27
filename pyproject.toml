@@ -18,8 +18,8 @@ djangorestframework-simplejwt = "^5.3.1"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "^7.3.0"}
 babel = "^2.14.0"
 
-
 [tool.poetry.group.dev.dependencies]
+python-dotenv = "^1.0.0"
 pre-commit = "^3.6.2"
 factory-boy = "^3.3.0"
 black = "^24.3.0"
@@ -33,7 +33,8 @@ build-backend = "poetry.core.masonry.api"
 extend-exclude = [
     '*.yml',
     '*.sh',
-    '.log'
+    '.log',
+    'migrations'
 ]
 select = ["F", "E", "W", "C90",
     "I", "N", "S", "B", "A",
