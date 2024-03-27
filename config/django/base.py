@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 import factory
-from app.core.utils import real_bool
 
 from config.env import APPS_DIR
 

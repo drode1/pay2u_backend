@@ -16,9 +16,3 @@ def recover_object(obj) -> None:
     obj.save(update_fields=['deleted_at'])
 
     return None
-
-
-def real_bool(value: str):
-    """ Convert string value to real bool. """
-
-    return bool(value.lower() == 'true')
