@@ -19,8 +19,12 @@ class UserAdmin(BaseAdminModel):
         'updated_at',
     )
 
-    search_fields = ('first_name', 'last_name', 'email')
-    search_help_text = 'Fiend by first / last names, email'
+    search_fields = (
+        'first_name',
+        'last_name',
+        'email'
+    )
+    search_help_text = f"Find by {' / '.join(search_fields)}"
 
     fieldsets = (
         (None,
@@ -31,39 +35,45 @@ class UserAdmin(BaseAdminModel):
                  'is_superuser',
              )
          }),
-        ('General',
-         {
-             'classes': ['extrapretty'],
-             'fields':
-                 (
-                     (
-                         'email',
-                         'phone'
-                     ),
-                     (
-                         'first_name',
-                         'last_name',
-                         'patronymic',
-                     ),
-                 ),
-         }),
-        ('Permissions',
-         {
-             'classes': ['collapse'],
-             'fields': (
-                 'groups',
-                 'user_permissions',
-             ),
-         }),
-        ('Dates',
-         {
-             'fields': (
-                 'date_joined',
-                 'last_login',
-                 'updated_at',
-                 'deleted_at',
-             )
-         }),
+        (
+            'General',
+            {
+                'classes': ['extrapretty'],
+                'fields':
+                    (
+                        (
+                            'email',
+                            'phone'
+                        ),
+                        (
+                            'first_name',
+                            'last_name',
+                            'patronymic',
+                        ),
+                    ),
+            }
+        ),
+        (
+            'Permissions',
+            {
+                'classes': ['collapse'],
+                'fields': (
+                    'groups',
+                    'user_permissions',
+                ),
+            }
+        ),
+        (
+            'Dates',
+            {
+                'fields': (
+                    'date_joined',
+                    'last_login',
+                    'updated_at',
+                    'deleted_at',
+                )
+            }
+        ),
     )
 
     add_fieldsets = (
@@ -74,30 +84,34 @@ class UserAdmin(BaseAdminModel):
                  'is_staff',
                  'is_superuser',
              )}),
-        ('General',
-         {
-             'classes': ['extrapretty'],
-             'fields':
-                 (
-                     (
-                         'email',
-                         'phone',
-                     ),
-                     (
-                         'first_name',
-                         'last_name',
-                         'patronymic',
-                     ),
-                 ),
-         }),
-        ('Permissions',
-         {
-             'classes': ['collapse'],
-             'fields': (
-                 'groups',
-                 'user_permissions',
-             ),
-         }),
+        (
+            'General',
+            {
+                'classes': ['extrapretty'],
+                'fields':
+                    (
+                        (
+                            'email',
+                            'phone',
+                        ),
+                        (
+                            'first_name',
+                            'last_name',
+                            'patronymic',
+                        ),
+                    ),
+            }
+        ),
+        (
+            'Permissions',
+            {
+                'classes': ['collapse'],
+                'fields': (
+                    'groups',
+                    'user_permissions',
+                ),
+            }
+        ),
     )
 
     def get_fieldsets(self, request, obj=None):
