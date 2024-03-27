@@ -36,17 +36,17 @@ class Command(BaseCommand):
         InvoiceFactory: 5,
         PromocodeFactory: 7,
         SubscriptionFactory: 7,
-        TariffFactory: 7,
+        TariffFactory: 21,
     }
 
     MODELS = (
         User,
-        Category,
         Cashback,
         Invoice,
         Promocode,
-        Subscription,
         Tariff,
+        Subscription,
+        Category,
     )
 
     def clean_db(self, models: [Model]) -> None:

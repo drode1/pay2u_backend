@@ -46,6 +46,7 @@ def recover_object(modeladmin, request, queryset):
         messages.SUCCESS
     )
 
+
 class IsDeletedAdminFilter(admin.SimpleListFilter):
     title = 'Deleted'
     parameter_name = 'is_deleted'
@@ -62,6 +63,7 @@ class IsDeletedAdminFilter(admin.SimpleListFilter):
         elif self.value() == '0':
             return queryset.filter(deleted_at__isnull=True)
         return queryset
+
 
 class BaseAdminModel(admin.ModelAdmin):
     soft_delete = False
