@@ -33,7 +33,7 @@ class Command(BaseCommand):
         InvoiceFactory: 5,
     }
 
-    MODELS = (User, Category, Cashback, Invoice)
+    MODELS = (User, Category, Cashback, Invoice,)
 
     def clean_db(self, models: [Model]) -> None:
         for model in models:
