@@ -6,8 +6,9 @@ from app.core.models import BaseModel
 class Category(BaseModel):
     name = models.TextField(
         'Name',
+        unique=True,
         null=False,
-        blank=False
+        blank=False,
     )
 
     class Meta:
