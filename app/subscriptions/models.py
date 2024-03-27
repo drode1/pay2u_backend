@@ -4,7 +4,6 @@ from app.core.models import BaseModel
 
 
 class Category(BaseModel):
-
     name = models.TextField(
         'Name',
         null=False,
@@ -28,7 +27,6 @@ class Category(BaseModel):
 
 
 class Cashback(BaseModel):
-
     amount = models.FloatField(
         'Amount',
         null=False,
@@ -48,11 +46,10 @@ class Cashback(BaseModel):
         return f'Cashback {self.id}'
 
     def __str__(self):
-        return f'Cashback {self.amount}'
+        return str(self.amount)
 
 
 class Invoice(BaseModel):
-
     amount = models.FloatField(
         'Amount',
         null=False,
@@ -78,4 +75,150 @@ class Invoice(BaseModel):
         return f'Invoice {self.id}'
 
     def __str__(self):
-        return f'Invoice {self.amount}'
+        return f'{self.id}'
+
+
+class Promocode(BaseModel):
+    name = models.CharField(
+        'Name',
+        blank=False,
+        null=False,
+    )
+    is_active = models.BooleanField(
+        'Is active',
+        blank=False,
+        null=False,
+        default=True,
+    )
+    amount = models.FloatField(
+        'Amount',
+        null=False,
+        blank=False
+    )
+
+    class Meta:
+        verbose_name = 'Promocode'
+        verbose_name_plural = 'Promocodes'
+        db_table = 'promocodes'
+        ordering = (
+            'id',
+            'name',
+            'is_active',
+            'amount',
+        )
+
+    def __repr__(self):
+        return f'Promocode {self.id}'
+
+    def __str__(self):
+        return self.name
+
+
+class Subscription(BaseModel):
+    name = models.CharField(
+        'Name',
+        blank=False,
+        null=False,
+    )
+    description = models.TextField(
+        'Description',
+        null=False,
+        blank=False,
+    )
+    cashback = models.ForeignKey(
+        Cashback,
+        verbose_name='Cashback',
+        related_name='subscription_cashback',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=False,
+    )
+    category = models.ForeignKey(
+        Category,
+        verbose_name='Category',
+        related_name='subscription_category',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=False,
+    )
+    is_recommended = models.BooleanField(
+        'Is recommended',
+        blank=False,
+        null=False,
+        default=False,
+    )
+    image = models.ImageField(
+        'Image',
+        upload_to='subscriptions/',
+        blank=False,
+        null=False,
+    )
+
+    class Meta:
+        verbose_name = 'Subscription'
+        verbose_name_plural = 'Subscriptions'
+        db_table = 'subscriptions'
+        ordering = (
+            'id',
+            'name',
+            'category',
+            'is_recommended',
+        )
+
+    def __repr__(self):
+        return f'Subscription {self.id}'
+
+    def __str__(self):
+        return self.name
+
+
+class Tariff(BaseModel):
+    name = models.CharField(
+        'Name',
+        blank=False,
+        null=False,
+    )
+    subscription = models.ForeignKey(
+        Subscription,
+        verbose_name='Subscription',
+        related_name='subscription_tariff',
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+    )
+    promocode = models.ForeignKey(
+        Promocode,
+        verbose_name='Promocode',
+        related_name='promocode_tariff',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    amount = models.FloatField(
+        'Amount',
+        null=False,
+        blank=False
+    )
+    description = models.TextField(
+        'Description',
+        null=False,
+        blank=False,
+    )
+
+    class Meta:
+        verbose_name = 'Tariff'
+        verbose_name_plural = 'Tariffs'
+        db_table = 'tariffs'
+        ordering = (
+            'id',
+            'name',
+            'subscription',
+            'amount',
+            'promocode',
+        )
+
+    def __repr__(self):
+        return f'Tariff {self.id}'
+
+    def __str__(self):
+        return self.name

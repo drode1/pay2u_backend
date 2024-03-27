@@ -4,20 +4,23 @@ from django.core.management.base import BaseCommand
 from django.db.models import Model
 
 from app.subscriptions.factories import (
-    CategoryFactory,
     CashbackFactory,
-    InvoiceFactory
+    CategoryFactory,
+    InvoiceFactory,
+    PromocodeFactory,
+    SubscriptionFactory,
+    TariffFactory,
 )
-from app.users.factories import (
-    UserAdminFactory,
-    UserFactory
-)
-from app.users.models import User
 from app.subscriptions.models import (
-    Category,
     Cashback,
-    Invoice
+    Category,
+    Invoice,
+    Promocode,
+    Subscription,
+    Tariff,
 )
+from app.users.factories import UserAdminFactory, UserFactory
+from app.users.models import User
 
 logger = logging.getLogger()
 
@@ -31,9 +34,20 @@ class Command(BaseCommand):
         CategoryFactory: 4,
         CashbackFactory: 5,
         InvoiceFactory: 5,
+        PromocodeFactory: 7,
+        SubscriptionFactory: 7,
+        TariffFactory: 7,
     }
 
-    MODELS = (User, Category, Cashback, Invoice,)
+    MODELS = (
+        User,
+        Category,
+        Cashback,
+        Invoice,
+        Promocode,
+        Subscription,
+        Tariff,
+    )
 
     def clean_db(self, models: [Model]) -> None:
         for model in models:

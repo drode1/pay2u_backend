@@ -17,6 +17,7 @@ gunicorn = "^21.2.0"
 djangorestframework-simplejwt = "^5.3.1"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "^7.3.0"}
 babel = "^2.14.0"
+pillow = "^10.2.0"
 
 [tool.poetry.group.dev.dependencies]
 python-dotenv = "^1.0.0"
