@@ -20,8 +20,8 @@ class TokenCreateView(CreateApiView):
 
         return Response(
             {
-                'refresh': str(refresh_token),
-                'access': str(access_token)
+                'refresh_token': str(refresh_token),
+                'access_token': str(access_token)
             },
             status=status.HTTP_201_CREATED
         )

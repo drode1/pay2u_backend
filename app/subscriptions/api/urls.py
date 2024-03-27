@@ -6,8 +6,8 @@ app_name = 'subscriptions'
 
 subscriptions_urlpatterns = [
     path(
-        'categories/list/',
+        'categories/',
         CategoryListApiView.as_view(),
-        name='category_list'
+        name='categories_list'
     ),
 ]
