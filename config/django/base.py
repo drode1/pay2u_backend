@@ -23,6 +23,7 @@ THIRD_PARTY_APPS = [
     'django_json_widget',
     'corsheaders',
     'phonenumber_field',
+    'django_filters',
 ]
 
 INSTALLED_APPS = [
