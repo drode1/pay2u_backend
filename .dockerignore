@@ -1,0 +1,15 @@
+__pycache__
+*.log
+database
+.gitignore
+.pre-commit-config.yaml
+README.md
+.DS_Store
+.idea
+.git
+.ruff_cache
+.github
+app/static/*
+app/media/*
+.env.example
+.env

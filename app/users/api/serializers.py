@@ -21,8 +21,8 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
 
     def get_count_sub(self, obj):
         # Пока не знаю, что это за поля
-        raise NotImplemented
+        raise NotImplementedError
 
     def get_cashback_month(self, obj):
         # Пока не знаю, что это за поля
-        raise NotImplemented
+        raise NotImplementedError

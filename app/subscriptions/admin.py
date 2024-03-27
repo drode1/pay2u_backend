@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from app.core.admin import BaseAdminModel
-from app.subscriptions.models import Category, Cashback, Invoice
+from app.subscriptions.models import Cashback, Category, Invoice
 
 
 @admin.register(Category)
