@@ -138,7 +138,7 @@ class Subscription(BaseModel):
         Category,
         verbose_name='Category',
         related_name='subscription_category',
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
         null=True,
         blank=False,
     )
@@ -183,7 +183,7 @@ class Tariff(BaseModel):
         Subscription,
         verbose_name='Subscription',
         related_name='subscription_tariff',
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
         null=False,
         blank=False,
     )

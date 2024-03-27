@@ -50,7 +50,6 @@ class CashbackAdmin(BaseAdminModel):
         'id',
         'amount',
     )
-
     search_fields = (
         'amount',
     )
@@ -126,6 +125,7 @@ class InvoiceAdmin(BaseAdminModel):
 
 @admin.register(Promocode)
 class PromocodeAdmin(BaseAdminModel):
+    soft_delete = True
     list_display = (
         'id',
         'name',
@@ -175,6 +175,7 @@ class TariffInlineUserAdmin(admin.TabularInline):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(BaseAdminModel):
+    soft_delete = True
     list_display = (
         'id',
         'name',
@@ -227,6 +228,7 @@ class SubscriptionAdmin(BaseAdminModel):
 
 @admin.register(Tariff)
 class TariffAdmin(BaseAdminModel):
+    soft_delete = True
     list_display = (
         'id',
         'name',
