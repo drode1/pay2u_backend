@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from app.core.admin import BaseAdminModel
+from app.core.admin import BaseAdminModel, IsDeletedAdminFilter
 from app.subscriptions.models import (
     Cashback,
     Category,
@@ -185,6 +185,7 @@ class SubscriptionAdmin(BaseAdminModel):
     )
     list_filter = (
         'is_recommended',
+        IsDeletedAdminFilter,
     )
     search_fields = (
         'name',

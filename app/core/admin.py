@@ -46,6 +46,22 @@ def recover_object(modeladmin, request, queryset):
         messages.SUCCESS
     )
 
+class IsDeletedAdminFilter(admin.SimpleListFilter):
+    title = 'Deleted'
+    parameter_name = 'is_deleted'
+
+    def lookups(self, request, model_admin):
+        return (
+            (1, 'Yes',),
+            (0, 'No'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '1':
+            return queryset.filter(deleted_at__isnull=False)
+        elif self.value() == '0':
+            return queryset.filter(deleted_at__isnull=True)
+        return queryset
 
 class BaseAdminModel(admin.ModelAdmin):
     soft_delete = False
@@ -55,6 +71,8 @@ class BaseAdminModel(admin.ModelAdmin):
         make_object_deleted_at,
         recover_object,
     )
+
+    list_filter = (IsDeletedAdminFilter,)
 
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
