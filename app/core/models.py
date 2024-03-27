@@ -1,6 +1,26 @@
 from django.db import models
+from django.db.models import QuerySet
 
 from app.core.utils import recover_object, soft_delete_object
+
+
+class BaseModelQuerySet(QuerySet):
+    def without_trashed(self):
+        return self.filter(deleted_at__isnull=True)
+
+    def only_trashed(self):
+        return self.filter(deleted_at__isnull=False)
+
+
+class BaseModelManager(models.Manager):
+    def get_queryset(self):
+        return BaseModelQuerySet(self.model)
+
+    def without_trashed(self):
+        return self.get_queryset().without_trashed()
+
+    def only_trashed(self):
+        return self.get_queryset().only_trashed()
 
 
 class BaseModel(models.Model):
@@ -11,6 +31,8 @@ class BaseModel(models.Model):
     updated_at = models.DateTimeField('updated at', auto_now=True)
 
     deleted_at = models.DateTimeField('deleted at', null=True, blank=True)
+
+    objects = BaseModelManager()
 
     class Meta:
         abstract = True

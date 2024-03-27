@@ -9,17 +9,17 @@ from app.subscriptions.models import Category, Subscription
 
 
 class CategoryListApiView(ListApiView):
-    queryset = Category.objects.all()
+    queryset = Category.objects.without_trashed()
     serializer_class = CategoryReadOutputSerializer
 
 
 class SubscriptionListApiView(ListApiView):
-    queryset = Subscription.objects.all()
+    queryset = Subscription.objects.without_trashed()
     serializer_class = SubscriptionReadOutputSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ('is_recommended',)
 
 
 class DetailSubscriptionApiView(RetrieveApiView):
-    queryset = Subscription.objects.all()
+    queryset = Subscription.objects.without_trashed()
     serializer_class = SubscriptionReadOutputSerializer
