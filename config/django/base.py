@@ -119,7 +119,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 DEFAULT_MAX_LENGTH_FIELD = 255
 MAX_NAME_LENGTH = 20
-MAX_EMAIL_LENGTH = 40
 
 from config.settings.logs import *  # noqa
 from config.settings.cors import *  # noqa
