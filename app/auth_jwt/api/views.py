@@ -15,13 +15,13 @@ class TokenCreateView(CreateApiView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        user = get_user_by_id(request.data.get('user_id'))
+        user = get_user_by_id(request.data.get('id'))
         refresh_token, access_token = get_tokens_for_user(user)
 
         return Response(
             {
-                'refresh': str(refresh_token),
-                'access': str(access_token)
+                'refresh_token': str(refresh_token),
+                'access_token': str(access_token)
             },
             status=status.HTTP_201_CREATED
         )

@@ -14,7 +14,7 @@ class Category(BaseModel):
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
-        db_table = 'category'
+        db_table = 'categories'
         ordering = (
             'id',
             'name',
@@ -68,7 +68,7 @@ class Invoice(BaseModel):
     class Meta:
         verbose_name = 'Invoice'
         verbose_name_plural = 'Invoices'
-        db_table = 'invoice'
+        db_table = 'invoices'
         ordering = (
             'id',
             'date',

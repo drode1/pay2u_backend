@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from faker import Faker
+import factory
 
 from config.env import APPS_DIR
 
@@ -81,7 +81,6 @@ DATABASES = {
     },
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -125,5 +124,6 @@ from config.settings.logs import *  # noqa
 from config.settings.cors import *  # noqa
 from config.settings.rest_framework import *  # noqa
 from config.settings.email import *  # noqa
+from config.settings.jwt import *  # noqa
 
-Faker._DEFAULT_LOCALE = 'ru_RU'
+factory.Faker._DEFAULT_LOCALE = 'ru_RU'

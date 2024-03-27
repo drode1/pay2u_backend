@@ -37,7 +37,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    """User base model."""
+    """ User base model. """
 
     username = None
 
@@ -63,12 +63,6 @@ class User(AbstractUser):
     patronymic = models.CharField(
         'Patronymic',
         max_length=MAX_NAME_LENGTH,
-        blank=False,
-        null=False,
-    )
-    notification_date = models.DateField(
-        'Notification date',
-        auto_now=True,
         blank=False,
         null=False,
     )
