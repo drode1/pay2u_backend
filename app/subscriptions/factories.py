@@ -1,10 +1,9 @@
-from factory import django, Faker, Iterator
+from factory import Faker, Iterator, django
 
-from app.subscriptions.models import Category, Cashback, Invoice
+from app.subscriptions.models import Cashback, Category, Invoice
 
 
 class CategoryFactory(django.DjangoModelFactory):
-
     class Meta:
         model = Category
 
@@ -19,7 +18,6 @@ class CategoryFactory(django.DjangoModelFactory):
 
 
 class CashbackFactory(django.DjangoModelFactory):
-
     class Meta:
         model = Cashback
 
@@ -27,7 +25,6 @@ class CashbackFactory(django.DjangoModelFactory):
 
 
 class InvoiceFactory(django.DjangoModelFactory):
-
     class Meta:
         model = Invoice
 
