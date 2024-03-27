@@ -3,6 +3,8 @@ from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ngettext
 from django_json_widget.widgets import JSONEditorWidget
+from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 
 @admin.action(description='Delete')
@@ -10,8 +12,8 @@ def make_object_deleted_at(modeladmin, request, queryset):
     updated = queryset.update(deleted_at=now())
 
     message = ngettext(
-        "%(count)d %(model)s was deleted.",
-        "%(count)d %(models)s were deleted.",
+        '%(count)d %(model)s was deleted.',
+        '%(count)d %(models)s were deleted.',
         updated
     ) % {'count': updated,
          'model': modeladmin.opts.verbose_name,
@@ -30,8 +32,8 @@ def recover_object(modeladmin, request, queryset):
     updated = queryset.update(deleted_at=None)
 
     message = ngettext(
-        "%(count)d %(model)s was recovered.",
-        "%(count)d %(models)s were recovered.",
+        '%(count)d %(model)s was recovered.',
+        '%(count)d %(models)s were recovered.',
         updated
     ) % {'count': updated,
          'model': modeladmin.opts.verbose_name,
@@ -56,6 +58,7 @@ class BaseAdminModel(admin.ModelAdmin):
 
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
+        PhoneNumberField: {'widget': PhoneNumberPrefixWidget},
     }
 
     readonly_fields = ('created_at', 'updated_at',)

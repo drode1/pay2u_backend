@@ -1,6 +1,4 @@
 from django.contrib import admin
-from phonenumber_field.widgets import PhoneNumberPrefixWidget
-from phonenumber_field.modelfields import PhoneNumberField
 
 from app.core.admin import BaseAdminModel
 from app.users.models import User
@@ -101,9 +99,6 @@ class UserAdmin(BaseAdminModel):
              ),
          }),
     )
-    formfield_overrides = {
-        PhoneNumberField: {'widget': PhoneNumberPrefixWidget},
-    }
 
     def get_fieldsets(self, request, obj=None):
         if not obj:
