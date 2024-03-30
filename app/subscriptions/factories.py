@@ -82,7 +82,8 @@ class SubscriptionFactory(django.DjangoModelFactory):
         getter=lambda c: c
     )
     is_recommended = Faker('pybool', truth_probability=70)
-    image = Faker('image_url', width=88, height=88)
+    image_preview = Faker('image_url', width=88, height=88)
+    image_detail = Faker('image_url', width=264, height=264)
 
 
 class TariffFactory(django.DjangoModelFactory):

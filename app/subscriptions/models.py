@@ -148,8 +148,14 @@ class Subscription(BaseModel):
         null=False,
         default=False,
     )
-    image = models.ImageField(
-        'Image',
+    image_preview = models.ImageField(
+        'Preview Image',
+        upload_to='subscriptions/',
+        blank=False,
+        null=False,
+    )
+    image_detail = models.ImageField(
+        'Detail Image',
         upload_to='subscriptions/',
         blank=False,
         null=False,

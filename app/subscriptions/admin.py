@@ -207,7 +207,8 @@ class SubscriptionAdmin(BaseAdminModel):
                         'name',
                         'description',
                     ),
-                    'image',
+                    'image_preview',
+                    'image_detail',
                     (
                         'cashback',
                         'category',

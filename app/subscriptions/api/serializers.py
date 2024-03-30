@@ -44,7 +44,8 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
-            'image',
+            'image_preview',
+            'image_detail',
             'description',
             'is_recommended',
             'category',
