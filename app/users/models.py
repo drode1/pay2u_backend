@@ -121,3 +121,11 @@ class User(AbstractUser):
     @property
     def full_name(self):
         return f'{self.first_name} {self.patronymic} {self.last_name}'
+
+    @property
+    def get_subscriptions_count(self):
+        raise NotImplementedError
+
+    @property
+    def get_month_cashback(self):
+        raise NotImplementedError
