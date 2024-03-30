@@ -24,7 +24,7 @@ class UserFactory(django.DjangoModelFactory):
 
     first_name = Faker('first_name')
     last_name = Faker('last_name')
-    patronymic = Faker('middle_name')
+    patronymic = Faker('language_name')
     phone = Faker('phone_number')
     email = Faker('email')
     password = make_password('test')
