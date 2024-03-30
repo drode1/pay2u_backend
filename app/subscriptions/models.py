@@ -80,6 +80,7 @@ class Invoice(BaseModel):
 
 
 class Promocode(BaseModel):
+    """Activation subscription code model"""
     name = models.CharField(
         'Name',
         blank=False,
@@ -91,11 +92,6 @@ class Promocode(BaseModel):
         null=False,
         default=True,
     )
-    amount = models.FloatField(
-        'Amount',
-        null=False,
-        blank=False
-    )
 
     class Meta:
         verbose_name = 'Promocode'
@@ -105,7 +101,6 @@ class Promocode(BaseModel):
             'id',
             'name',
             'is_active',
-            'amount',
         )
 
     def __repr__(self):
@@ -113,6 +108,14 @@ class Promocode(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def activate(self):
+        """
+        Activate subscription promocode and deactivate if for further
+        activation possibilities
+        """
+        self.is_active = False
+        self.soft_delete()
 
 
 class Subscription(BaseModel):
@@ -193,14 +196,6 @@ class Tariff(BaseModel):
         null=False,
         blank=False,
     )
-    promocode = models.ForeignKey(
-        Promocode,
-        verbose_name='Promocode',
-        related_name='promocode_tariff',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-    )
     amount = models.FloatField(
         'Amount',
         null=False,
@@ -221,7 +216,6 @@ class Tariff(BaseModel):
             'name',
             'subscription',
             'amount',
-            'promocode',
         )
 
     def __repr__(self):

@@ -129,7 +129,6 @@ class PromocodeAdmin(BaseAdminModel):
     list_display = (
         'id',
         'name',
-        'amount',
         'is_active',
     )
     list_filter = (
@@ -137,7 +136,6 @@ class PromocodeAdmin(BaseAdminModel):
     )
     search_fields = (
         'name',
-        'amount',
     )
     search_help_text = f"Find by {' / '.join(search_fields)}"
     fieldsets = (
@@ -149,7 +147,6 @@ class PromocodeAdmin(BaseAdminModel):
                 'fields': (
                     'is_active',
                     'name',
-                    'amount',
                 ),
             }
         ),
@@ -235,13 +232,11 @@ class TariffAdmin(BaseAdminModel):
         'id',
         'name',
         'subscription',
-        'promocode',
         'amount',
     )
     search_fields = (
         'name',
         'subscription',
-        'promocode',
     )
     search_help_text = f"Find by {' / '.join(search_fields)}"
     fieldsets = (
@@ -258,7 +253,6 @@ class TariffAdmin(BaseAdminModel):
                     ),
                     (
                         'subscription',
-                        'promocode',
                     ),
                 )
             }

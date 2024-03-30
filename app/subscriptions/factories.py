@@ -42,19 +42,13 @@ class PromocodeFactory(django.DjangoModelFactory):
     class Meta:
         model = Promocode
 
-    name = Iterator(
-        (
-            'BlackFriday',
-            'МАРТ8',
-            'ФЕВРАЛЬ23',
-            '15',
-            '10',
-            '5',
-            'Mail5',
-        )
+    name = Faker(
+        'password',
+        length=6,
+        special_chars=False,
+        upper_case=False
     )
     is_active = True
-    amount = Faker('random_number', digits=2, fix_len=True)
 
 
 class SubscriptionFactory(django.DjangoModelFactory):
@@ -101,10 +95,6 @@ class TariffFactory(django.DjangoModelFactory):
     )
     subscription = fuzzy.FuzzyChoice(
         Subscription.objects.all(),
-        getter=lambda c: c
-    )
-    promocode = fuzzy.FuzzyChoice(
-        Promocode.objects.all(),
         getter=lambda c: c
     )
     amount = fuzzy.FuzzyChoice(
