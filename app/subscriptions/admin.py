@@ -163,6 +163,9 @@ class PromocodeAdmin(BaseAdminModel):
         ),
     )
 
+    def has_add_permission(self, request):
+        return False
+
 
 class TariffInlineUserAdmin(admin.TabularInline):
     model = Tariff
@@ -309,7 +312,7 @@ class ClientSubscriptionAdmin(BaseAdminModel):
         'tariff',
         'promocode',
         'invoice',
-        # 'expiration_date',
+        'expiration_date',
         'created_at',
         'updated_at',
     )
@@ -358,3 +361,6 @@ class ClientSubscriptionAdmin(BaseAdminModel):
             }
         ),
     )
+
+    def has_add_permission(self, request):
+        return False
