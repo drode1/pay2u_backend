@@ -24,8 +24,8 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
             'month_cashback',
         )
 
-    def get_subscriptions_count(self, obj):
-        raise NotImplementedError
+    def get_subscriptions_count(self, obj: User):
+        return obj.get_active_subscriptions_count
 
-    def get_month_cashback(self, obj):
-        raise NotImplementedError
+    def get_month_cashback(self, obj: User):
+        return obj.get_month_cashback

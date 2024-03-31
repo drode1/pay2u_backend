@@ -6,14 +6,14 @@ from django.db.models import Model
 from app.subscriptions.factories import (
     CashbackFactory,
     CategoryFactory,
-    InvoiceFactory,
-    PromocodeFactory,
+    ClientSubscriptionFactory,
     SubscriptionFactory,
     TariffFactory,
 )
 from app.subscriptions.models import (
     Cashback,
     Category,
+    ClientSubscription,
     Invoice,
     Promocode,
     Subscription,
@@ -33,20 +33,20 @@ class Command(BaseCommand):
         UserFactory: 1,
         CategoryFactory: 4,
         CashbackFactory: 5,
-        InvoiceFactory: 5,
-        PromocodeFactory: 7,
         SubscriptionFactory: 7,
-        TariffFactory: 7,
+        TariffFactory: 21,
+        ClientSubscriptionFactory: 2
     }
 
     MODELS = (
         User,
-        Category,
         Cashback,
-        Invoice,
-        Promocode,
-        Subscription,
         Tariff,
+        Subscription,
+        Category,
+        ClientSubscription,
+        Promocode,
+        Invoice,
     )
 
     def clean_db(self, models: [Model]) -> None:

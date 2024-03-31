@@ -63,6 +63,7 @@ class IsDeletedAdminFilter(admin.SimpleListFilter):
             return queryset.filter(deleted_at__isnull=True)
         return queryset
 
+
 class BaseAdminModel(admin.ModelAdmin):
     soft_delete = False
     save_on_top = True

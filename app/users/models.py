@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Sum
 from phonenumber_field.modelfields import PhoneNumberField
 
 from app.core.utils import recover_object, soft_delete_object
@@ -120,4 +121,22 @@ class User(AbstractUser):
 
     @property
     def full_name(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.first_name} {self.patronymic} {self.last_name}'
+
+    def get_active_subscriptions(self):
+        from app.subscriptions.models import ClientSubscription
+
+        return ClientSubscription.objects.filter(
+            client=self,
+            is_active=True
+        )
+
+    @property
+    def get_active_subscriptions_count(self):
+        return self.get_active_subscriptions().count()
+
+    @property
+    def get_month_cashback(self):
+        subscriptions = self.get_active_subscriptions()
+        return subscriptions.aggregate(
+            cashback=Sum('subscription__cashback__amount'))['cashback']

@@ -9,7 +9,7 @@ from app.users.api.urls import user_patterns
 
 api_v1_patterns = [
     path('login/', include((token_urlpatterns, 'auth_jwt'))),
-    path('clients/', include((user_patterns, 'users'))),
+    path('clients/', include((user_patterns, 'clients'))),
     path('subscriptions/', include((subscriptions_urlpatterns, 'subscriptions')))
 ]
 

@@ -4,6 +4,7 @@ from app.core.admin import BaseAdminModel, IsDeletedAdminFilter
 from app.subscriptions.models import (
     Cashback,
     Category,
+    ClientSubscription,
     Invoice,
     Promocode,
     Subscription,
@@ -129,7 +130,6 @@ class PromocodeAdmin(BaseAdminModel):
     list_display = (
         'id',
         'name',
-        'amount',
         'is_active',
     )
     list_filter = (
@@ -137,7 +137,6 @@ class PromocodeAdmin(BaseAdminModel):
     )
     search_fields = (
         'name',
-        'amount',
     )
     search_help_text = f"Find by {' / '.join(search_fields)}"
     fieldsets = (
@@ -149,7 +148,6 @@ class PromocodeAdmin(BaseAdminModel):
                 'fields': (
                     'is_active',
                     'name',
-                    'amount',
                 ),
             }
         ),
@@ -192,9 +190,9 @@ class SubscriptionAdmin(BaseAdminModel):
         'category',
     )
     search_help_text = f"Find by {' / '.join(search_fields)}"
-    inlines = [
+    inlines = (
         TariffInlineUserAdmin,
-    ]
+    )
     fieldsets = (
         (
             'General', {
@@ -207,7 +205,8 @@ class SubscriptionAdmin(BaseAdminModel):
                         'name',
                         'description',
                     ),
-                    'image',
+                    'image_preview',
+                    'image_detail',
                     (
                         'cashback',
                         'category',
@@ -232,15 +231,15 @@ class TariffAdmin(BaseAdminModel):
     soft_delete = True
     list_display = (
         'id',
-        'name',
+        'days_amount',
         'subscription',
-        'promocode',
         'amount',
     )
-    search_fields = (
-        'name',
+    list_filter = (
         'subscription',
-        'promocode',
+    )
+    search_fields = (
+        'subscription',
     )
     search_help_text = f"Find by {' / '.join(search_fields)}"
     fieldsets = (
@@ -252,13 +251,91 @@ class TariffAdmin(BaseAdminModel):
                 'fields': (
                     'amount',
                     (
-                        'name',
+                        'days_amount',
                         'description',
                     ),
                     (
                         'subscription',
-                        'promocode',
                     ),
+                )
+            }
+        ),
+        (
+            'Additional Information', {
+                'fields': (
+                    'created_at',
+                    'updated_at',
+                    'deleted_at'
+                ),
+            }
+        ),
+    )
+
+
+@admin.register(ClientSubscription)
+class ClientSubscriptionAdmin(BaseAdminModel):
+    soft_delete = True
+    list_display = (
+        'id',
+        'client',
+        'subscription',
+        'tariff',
+        'expiration_date',
+        'is_auto_pay',
+    )
+    list_filter = (
+        'is_active',
+        'is_liked',
+        'is_auto_pay',
+    )
+    search_fields = (
+        'client__email',
+        'subscription__name',
+        'tariff__name',
+    )
+    readonly_fields = (
+        'is_active',
+        'client',
+        'subscription',
+        'tariff',
+        'promocode',
+        'invoice',
+        # 'expiration_date',
+        'created_at',
+        'updated_at',
+    )
+    search_help_text = f"Find by {' / '.join(search_fields)}"
+    fieldsets = (
+        (
+            None, {
+                'fields': (
+                    'is_active',
+                    'is_liked',
+                    'is_auto_pay',
+                )
+            }
+        ),
+        (
+            'General', {
+                'classes': (
+                    'wide',
+                ),
+                'fields': (
+                    'client',
+                    'subscription',
+                    'tariff',
+                )
+            }
+        ),
+        (
+            'Payment data', {
+                'classes': (
+                    'wide',
+                ),
+                'fields': (
+                    'promocode',
+                    'invoice',
+                    'expiration_date',
                 )
             }
         ),
