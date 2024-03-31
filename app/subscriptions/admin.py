@@ -231,7 +231,7 @@ class TariffAdmin(BaseAdminModel):
     soft_delete = True
     list_display = (
         'id',
-        'name',
+        'days_amount',
         'subscription',
         'amount',
     )
@@ -239,7 +239,6 @@ class TariffAdmin(BaseAdminModel):
         'subscription',
     )
     search_fields = (
-        'name',
         'subscription',
     )
     search_help_text = f"Find by {' / '.join(search_fields)}"
@@ -252,7 +251,7 @@ class TariffAdmin(BaseAdminModel):
                 'fields': (
                     'amount',
                     (
-                        'name',
+                        'days_amount',
                         'description',
                     ),
                     (
@@ -301,7 +300,7 @@ class ClientSubscriptionAdmin(BaseAdminModel):
         'tariff',
         'promocode',
         'invoice',
-        'expiration_date',
+        # 'expiration_date',
         'created_at',
         'updated_at',
     )

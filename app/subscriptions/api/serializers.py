@@ -34,6 +34,7 @@ class TariffReadOutputSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
+            'days_amount',
             'amount',
             'description',
         )

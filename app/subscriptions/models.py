@@ -1,8 +1,11 @@
+import secrets
+import string
 from datetime import datetime, timedelta
 
 from django.db import models
 
 from app.core.models import BaseModel
+from app.subscriptions.enums import SubscriptionPeriod
 from app.users.models import User
 
 
@@ -113,13 +116,19 @@ class Promocode(BaseModel):
     def __str__(self):
         return self.name
 
-    @classmethod
-    def create(cls):
-        # Generate random activate code with 6 symbols
-        from app.subscriptions.services import create_new_code_for_promocode
-        code = create_new_code_for_promocode()
-
-        return cls.objects.create(name=code)
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            # Generate random activate code with 6 symbols
+            code_length = 6
+            while True:
+                code = ''.join(
+                    secrets.choice(string.ascii_uppercase + string.digits)
+                    for _ in range(code_length)
+                )
+                if not Promocode.objects.filter(name=code).exists():
+                    self.name = code
+                    break
+        super().save(*args, **kwargs)
 
     def activate(self):
         """
@@ -128,6 +137,7 @@ class Promocode(BaseModel):
         """
         self.is_active = False
         self.soft_delete()
+        self.save()
 
 
 class Subscription(BaseModel):
@@ -195,10 +205,12 @@ class Subscription(BaseModel):
 
 
 class Tariff(BaseModel):
-    name = models.CharField(
-        'Name',
+    days_amount = models.PositiveIntegerField(
+        'Days amount',
         blank=False,
         null=False,
+        choices=SubscriptionPeriod.choices,
+        default=SubscriptionPeriod.ONE_MONTH.value,
     )
     subscription = models.ForeignKey(
         Subscription,
@@ -225,7 +237,6 @@ class Tariff(BaseModel):
         db_table = 'tariffs'
         ordering = (
             'id',
-            'name',
             'subscription',
             'amount',
         )
@@ -234,7 +245,11 @@ class Tariff(BaseModel):
         return f'Tariff {self.id}'
 
     def __str__(self):
-        return self.name
+        return str(self.id)
+
+    @property
+    def name(self):
+        return SubscriptionPeriod(self.days_amount).label
 
 
 class ClientSubscription(BaseModel):
@@ -274,7 +289,9 @@ class ClientSubscription(BaseModel):
         'expiration_date',
         null=False,
         blank=False,
-        default=datetime.now() + timedelta(days=30)
+        default=datetime.now() + timedelta(
+            days=int(SubscriptionPeriod.ONE_MONTH)
+        )
     )
     invoice = models.ForeignKey(
         Invoice,

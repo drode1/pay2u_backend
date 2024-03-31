@@ -1,5 +1,6 @@
 from factory import Faker, Iterator, SubFactory, django, fuzzy, lazy_attribute
 
+from app.subscriptions.enums import SubscriptionPeriod
 from app.subscriptions.models import (
     Cashback,
     Category,
@@ -46,10 +47,6 @@ class PromocodeFactory(django.DjangoModelFactory):
 
     is_active = True
 
-    @classmethod
-    def _create(cls, model_class, *args, **kwargs):
-        return model_class.create()
-
 
 class SubscriptionFactory(django.DjangoModelFactory):
     class Meta:
@@ -84,14 +81,9 @@ class TariffFactory(django.DjangoModelFactory):
     class Meta:
         model = Tariff
 
-    name = fuzzy.FuzzyChoice(
-        (
-            '1 месяц',
-            '3 месяца',
-            '6 месяцев',
-            '12 месяцев',
-        ),
-        getter=lambda c: c
+    days_amount = fuzzy.FuzzyChoice(
+        SubscriptionPeriod.choices,
+        getter=lambda c: c[0]
     )
     subscription = fuzzy.FuzzyChoice(
         Subscription.objects.all(),
