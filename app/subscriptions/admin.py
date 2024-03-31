@@ -8,6 +8,7 @@ from app.subscriptions.models import (
     Invoice,
     Promocode,
     Subscription,
+    SubscriptionBenefits,
     Tariff,
 )
 
@@ -171,6 +172,13 @@ class TariffInlineUserAdmin(admin.TabularInline):
     max_num = 5
 
 
+class BenefitsInlineUserAdmin(admin.TabularInline):
+    model = SubscriptionBenefits
+    extra = -1
+    min_num = 1
+    max_num = 4
+
+
 @admin.register(Subscription)
 class SubscriptionAdmin(BaseAdminModel):
     soft_delete = True
@@ -192,6 +200,7 @@ class SubscriptionAdmin(BaseAdminModel):
     search_help_text = f"Find by {' / '.join(search_fields)}"
     inlines = (
         TariffInlineUserAdmin,
+        BenefitsInlineUserAdmin,
     )
     fieldsets = (
         (
@@ -300,7 +309,7 @@ class ClientSubscriptionAdmin(BaseAdminModel):
         'tariff',
         'promocode',
         'invoice',
-        # 'expiration_date',
+        'expiration_date',
         'created_at',
         'updated_at',
     )

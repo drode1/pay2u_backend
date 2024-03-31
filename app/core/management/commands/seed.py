@@ -7,6 +7,7 @@ from app.subscriptions.factories import (
     CashbackFactory,
     CategoryFactory,
     ClientSubscriptionFactory,
+    SubscriptionBenefitsFactory,
     SubscriptionFactory,
     TariffFactory,
 )
@@ -17,6 +18,7 @@ from app.subscriptions.models import (
     Invoice,
     Promocode,
     Subscription,
+    SubscriptionBenefits,
     Tariff,
 )
 from app.users.factories import UserAdminFactory, UserFactory
@@ -35,7 +37,8 @@ class Command(BaseCommand):
         CashbackFactory: 5,
         SubscriptionFactory: 7,
         TariffFactory: 21,
-        ClientSubscriptionFactory: 2
+        ClientSubscriptionFactory: 2,
+        SubscriptionBenefitsFactory: 10
     }
 
     MODELS = (
@@ -47,6 +50,7 @@ class Command(BaseCommand):
         ClientSubscription,
         Promocode,
         Invoice,
+        SubscriptionBenefits,
     )
 
     def clean_db(self, models: [Model]) -> None:

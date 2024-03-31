@@ -8,6 +8,7 @@ from app.subscriptions.models import (
     Invoice,
     Promocode,
     Subscription,
+    SubscriptionBenefits,
     Tariff,
 )
 from app.users.models import User
@@ -75,6 +76,18 @@ class SubscriptionFactory(django.DjangoModelFactory):
     is_recommended = Faker('pybool', truth_probability=70)
     image_preview = Faker('image_url', width=88, height=88)
     image_detail = Faker('image_url', width=264, height=264)
+
+
+class SubscriptionBenefitsFactory(django.DjangoModelFactory):
+    class Meta:
+        model = SubscriptionBenefits
+
+    subscription = fuzzy.FuzzyChoice(
+        Subscription.objects.all(),
+        getter=lambda c: c
+    )
+    icon = Faker('image_url', width=20, height=20)
+    benefit = Faker('sentence')
 
 
 class TariffFactory(django.DjangoModelFactory):

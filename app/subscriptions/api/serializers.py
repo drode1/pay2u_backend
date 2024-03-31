@@ -6,6 +6,7 @@ from app.subscriptions.models import (
     ClientSubscription,
     Invoice,
     Subscription,
+    SubscriptionBenefits,
     Tariff,
 )
 
@@ -39,12 +40,23 @@ class TariffReadOutputSerializer(serializers.ModelSerializer):
             'description',
         )
 
+class SubscriptionBenefitsReadOutputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubscriptionBenefits
+        fields = (
+            'id',
+            'icon',
+            'benefit',
+        )
 
 class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
     category = CategoryReadOutputSerializer()
     cashback = CashbackReadOutputSerializer()
     tariffs = serializers.SerializerMethodField(
         method_name='get_tariffs'
+    )
+    subscription_benefits = serializers.SerializerMethodField(
+        method_name='get_subscription_benefits'
     )
 
     class Meta:
@@ -59,12 +71,18 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
             'category',
             'cashback',
             'tariffs',
+            'subscription_benefits'
         )
 
     @staticmethod
     def get_tariffs(obj):
         tarrifs = Tariff.objects.filter(subscription_id=obj.id)
         return TariffReadOutputSerializer(tarrifs, many=True).data
+
+    @staticmethod
+    def get_subscription_benefits(obj):
+        benefits = SubscriptionBenefits.objects.filter(subscription_id=obj.id)
+        return SubscriptionBenefitsReadOutputSerializer(benefits, many=True).data
 
 
 class InvoiceReadOutputSerializer(serializers.ModelSerializer):

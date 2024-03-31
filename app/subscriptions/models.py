@@ -140,6 +140,42 @@ class Promocode(BaseModel):
         self.save()
 
 
+class SubscriptionBenefits(BaseModel):
+    subscription = models.ForeignKey(
+        'Subscription',
+        verbose_name='Subscription',
+        related_name='subscription_benefit',
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+    )
+    icon = models.ImageField(
+        'Icon',
+        upload_to='subscriptions/benefits',
+        blank=False,
+        null=False,
+    )
+    benefit = models.TextField(
+        'Benefit',
+        null=False,
+        blank=False,
+    )
+
+    class Meta:
+        verbose_name = 'Subscription benefit'
+        verbose_name_plural = 'Subscription benefits'
+        db_table = 'subscription_benefits'
+        ordering = (
+            'id',
+        )
+
+    def __repr__(self):
+        return f'Subscription benefit {self.id}'
+
+    def __str__(self):
+        return str(self.id)
+
+
 class Subscription(BaseModel):
     name = models.CharField(
         'Name',
