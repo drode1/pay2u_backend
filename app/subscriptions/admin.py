@@ -309,7 +309,7 @@ class ClientSubscriptionAdmin(BaseAdminModel):
         'tariff',
         'promocode',
         'invoice',
-        'expiration_date',
+        # 'expiration_date',
         'created_at',
         'updated_at',
     )

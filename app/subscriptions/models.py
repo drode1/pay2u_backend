@@ -376,13 +376,18 @@ class ClientSubscription(BaseModel):
     def __str__(self):
         return str(self.id)
 
+    def check_subscription_period(self):
+        from app.subscriptions.services import (
+            inactivate_or_renew_user_subscription,
+        )
+        inactivate_or_renew_user_subscription(self)
+
     def clean(self):
         super().clean()
 
         # Check that tariff is linked to concrete subscription
         from app.subscriptions.services import (
-            inactivate_or_renew_user_subscription,
             validate_tariff_subscription,
         )
         validate_tariff_subscription(self.tariff.id, self.subscription.id)
-        inactivate_or_renew_user_subscription(self)
+        self.check_subscription_period()
