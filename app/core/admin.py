@@ -46,7 +46,6 @@ def recover_object(modeladmin, request, queryset):
         messages.SUCCESS
     )
 
-
 class IsDeletedAdminFilter(admin.SimpleListFilter):
     title = 'Deleted'
     parameter_name = 'is_deleted'
