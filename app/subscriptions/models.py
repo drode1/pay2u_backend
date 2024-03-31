@@ -209,6 +209,12 @@ class Subscription(BaseModel):
         null=False,
         default=False,
     )
+    is_liked = models.BooleanField(
+        'Is liked',
+        blank=False,
+        null=False,
+        default=False,
+    )
     image_preview = models.ImageField(
         'Preview Image',
         upload_to='subscriptions/',
@@ -342,12 +348,6 @@ class ClientSubscription(BaseModel):
         blank=False,
         null=False,
         default=True,
-    )
-    is_liked = models.BooleanField(
-        'Is liked',
-        blank=False,
-        null=False,
-        default=False,
     )
     is_auto_pay = models.BooleanField(
         'Is auto-renewal',

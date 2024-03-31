@@ -1,8 +1,12 @@
 from rest_framework import generics
 from rest_framework.exceptions import MethodNotAllowed
 
-from app.core.api.mixins import RecoverModelMixin, SoftDestroyModelMixin, \
-    CreateModelMixin, UpdateModelMixin
+from app.core.api.mixins import (
+    CreateModelMixin,
+    RecoverModelMixin,
+    SoftDestroyModelMixin,
+    UpdateModelMixin,
+)
 
 
 class ListApiView(generics.ListAPIView):

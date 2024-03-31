@@ -42,7 +42,6 @@ def renew_client_subscription(client_subscription):
         invoice=create_invoice_with_tariff_amount(client_subscription.tariff),
         # Create new invoice
         is_active=client_subscription.is_active,
-        is_liked=client_subscription.is_liked,
         is_auto_pay=client_subscription.is_auto_pay
     )
     promocode.activate()

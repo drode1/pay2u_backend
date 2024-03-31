@@ -191,9 +191,11 @@ class SubscriptionAdmin(BaseAdminModel):
         'cashback',
         'category',
         'is_recommended',
+        'is_liked',
     )
     list_filter = (
         'is_recommended',
+        'is_liked',
         IsDeletedAdminFilter,
     )
     search_fields = (
@@ -213,6 +215,7 @@ class SubscriptionAdmin(BaseAdminModel):
                 ),
                 'fields': (
                     'is_recommended',
+                    'is_liked',
                     (
                         'name',
                         'description',
@@ -297,7 +300,6 @@ class ClientSubscriptionAdmin(BaseAdminModel):
     )
     list_filter = (
         'is_active',
-        'is_liked',
         'is_auto_pay',
     )
     search_fields = (
@@ -322,7 +324,6 @@ class ClientSubscriptionAdmin(BaseAdminModel):
             None, {
                 'fields': (
                     'is_active',
-                    'is_liked',
                     'is_auto_pay',
                 )
             }
