@@ -1,13 +1,15 @@
-from factory import Faker, Iterator, django, fuzzy
+from factory import Faker, Iterator, SubFactory, django, fuzzy, lazy_attribute
 
 from app.subscriptions.models import (
     Cashback,
     Category,
+    ClientSubscription,
     Invoice,
     Promocode,
     Subscription,
     Tariff,
 )
+from app.users.models import User
 
 
 class CategoryFactory(django.DjangoModelFactory):
@@ -42,13 +44,11 @@ class PromocodeFactory(django.DjangoModelFactory):
     class Meta:
         model = Promocode
 
-    name = Faker(
-        'password',
-        length=6,
-        special_chars=False,
-        upper_case=False
-    )
     is_active = True
+
+    @classmethod
+    def _create(cls, model_class, *args, **kwargs):
+        return model_class.create()
 
 
 class SubscriptionFactory(django.DjangoModelFactory):
@@ -107,3 +107,28 @@ class TariffFactory(django.DjangoModelFactory):
         getter=lambda c: c
     )
     description = Faker('sentence')
+
+
+class ClientSubscriptionFactory(django.DjangoModelFactory):
+    class Meta:
+        model = ClientSubscription
+
+    client = fuzzy.FuzzyChoice(
+        User.objects.all(),
+        getter=lambda c: c
+    )
+    subscription = fuzzy.FuzzyChoice(
+        Subscription.objects.all(),
+        getter=lambda c: c
+    )
+    promocode = SubFactory(PromocodeFactory)
+    invoice = SubFactory(InvoiceFactory)
+    is_liked = Faker('pybool', truth_probability=50)
+    is_auto_pay = Faker('pybool', truth_probability=20)
+
+    @lazy_attribute
+    def tariff(self):
+        # Get list of tariffs which linked to concrete subscription
+        tariffs = Tariff.objects.filter(subscription=self.subscription)
+        if tariffs.exists():
+            return fuzzy.FuzzyChoice(tariffs).fuzz()

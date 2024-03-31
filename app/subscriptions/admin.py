@@ -4,6 +4,7 @@ from app.core.admin import BaseAdminModel, IsDeletedAdminFilter
 from app.subscriptions.models import (
     Cashback,
     Category,
+    ClientSubscription,
     Invoice,
     Promocode,
     Subscription,
@@ -189,9 +190,9 @@ class SubscriptionAdmin(BaseAdminModel):
         'category',
     )
     search_help_text = f"Find by {' / '.join(search_fields)}"
-    inlines = [
+    inlines = (
         TariffInlineUserAdmin,
-    ]
+    )
     fieldsets = (
         (
             'General', {
@@ -234,6 +235,9 @@ class TariffAdmin(BaseAdminModel):
         'subscription',
         'amount',
     )
+    list_filter = (
+        'subscription',
+    )
     search_fields = (
         'name',
         'subscription',
@@ -254,6 +258,85 @@ class TariffAdmin(BaseAdminModel):
                     (
                         'subscription',
                     ),
+                )
+            }
+        ),
+        (
+            'Additional Information', {
+                'fields': (
+                    'created_at',
+                    'updated_at',
+                    'deleted_at'
+                ),
+            }
+        ),
+    )
+
+
+@admin.register(ClientSubscription)
+class ClientSubscriptionAdmin(BaseAdminModel):
+    soft_delete = True
+    list_display = (
+        'id',
+        'client',
+        'subscription',
+        'tariff',
+        'expiration_date',
+        'is_auto_pay',
+    )
+    list_filter = (
+        'is_active',
+        'is_liked',
+        'is_auto_pay',
+    )
+    search_fields = (
+        'client__email',
+        'subscription__name',
+        'tariff__name',
+    )
+    readonly_fields = (
+        'is_active',
+        'client',
+        'subscription',
+        'tariff',
+        'promocode',
+        'invoice',
+        'expiration_date',
+        'created_at',
+        'updated_at',
+    )
+    search_help_text = f"Find by {' / '.join(search_fields)}"
+    fieldsets = (
+        (
+            None, {
+                'fields': (
+                    'is_active',
+                    'is_liked',
+                    'is_auto_pay',
+                )
+            }
+        ),
+        (
+            'General', {
+                'classes': (
+                    'wide',
+                ),
+                'fields': (
+                    'client',
+                    'subscription',
+                    'tariff',
+                )
+            }
+        ),
+        (
+            'Payment data', {
+                'classes': (
+                    'wide',
+                ),
+                'fields': (
+                    'promocode',
+                    'invoice',
+                    'expiration_date',
                 )
             }
         ),
