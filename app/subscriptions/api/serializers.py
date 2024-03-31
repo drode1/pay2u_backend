@@ -40,6 +40,7 @@ class TariffReadOutputSerializer(serializers.ModelSerializer):
             'description',
         )
 
+
 class SubscriptionBenefitsReadOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscriptionBenefits
@@ -48,6 +49,7 @@ class SubscriptionBenefitsReadOutputSerializer(serializers.ModelSerializer):
             'icon',
             'benefit',
         )
+
 
 class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
     category = CategoryReadOutputSerializer()
@@ -68,10 +70,11 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
             'image_detail',
             'description',
             'is_recommended',
+            'is_liked',
             'category',
             'cashback',
             'tariffs',
-            'subscription_benefits'
+            'subscription_benefits',
         )
 
     @staticmethod
@@ -82,7 +85,7 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_subscription_benefits(obj):
         benefits = SubscriptionBenefits.objects.filter(subscription_id=obj.id)
-        return SubscriptionBenefitsReadOutputSerializer(benefits, many=True).data
+        return SubscriptionBenefitsReadOutputSerializer(benefits,many=True).data
 
 
 class InvoiceReadOutputSerializer(serializers.ModelSerializer):
@@ -109,6 +112,5 @@ class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
             'invoice',
             'expiration_date',
             'is_active',
-            'is_liked',
-            'is_liked',
+            'is_auto_pay',
         )
