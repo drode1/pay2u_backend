@@ -18,7 +18,7 @@ WORKDIR /var/www/html
 
 COPY ../poetry.lock ../pyproject.toml ./
 
-RUN $POETRY_HOME/bin/poetry install --no-interaction --no-ansi --no-root
+RUN $POETRY_HOME/bin/poetry install --no-interaction --no-ansi --no-root --without dev
 
 COPY . .
 
