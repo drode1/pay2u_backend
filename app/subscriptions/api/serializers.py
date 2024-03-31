@@ -1,6 +1,13 @@
 from rest_framework import serializers
 
-from app.subscriptions.models import Cashback, Category, Subscription, Tariff
+from app.subscriptions.models import (
+    Cashback,
+    Category,
+    ClientSubscription,
+    Invoice,
+    Subscription,
+    Tariff,
+)
 
 
 class CategoryReadOutputSerializer(serializers.ModelSerializer):
@@ -57,3 +64,32 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
     def get_tariffs(obj):
         tarrifs = Tariff.objects.filter(subscription_id=obj.id)
         return TariffReadOutputSerializer(tarrifs, many=True).data
+
+
+class InvoiceReadOutputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Invoice
+        fields = (
+            'id',
+            'amount',
+            'date',
+        )
+
+
+class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
+    subscription = SubscriptionReadOutputSerializer()
+    tariff = TariffReadOutputSerializer()
+    invoice = InvoiceReadOutputSerializer()
+
+    class Meta:
+        model = ClientSubscription
+        fields = (
+            'id',
+            'subscription',
+            'tariff',
+            'invoice',
+            'expiration_date',
+            'is_active',
+            'is_liked',
+            'is_liked',
+        )
