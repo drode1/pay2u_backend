@@ -1,13 +1,18 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
-from rest_framework.response import Response
 
-from app.core.api.generics import CreateApiView, ListApiView, RetrieveApiView
+from app.core.api.generics import (
+    CreateApiView,
+    DestroyApiView,
+    ListApiView,
+    RetrieveApiView,
+)
 from app.subscriptions.api.serializers import (
     CategoryReadOutputSerializer,
+    FavouriteInputSerializer,
+    FavouriteOutputSerializer,
     SubscriptionReadOutputSerializer,
 )
-from app.subscriptions.models import Category, Subscription
+from app.subscriptions.models import Category, Favourite, Subscription
 
 
 class CategoryListApiView(ListApiView):
@@ -19,7 +24,7 @@ class SubscriptionListApiView(ListApiView):
     queryset = Subscription.objects.without_trashed()
     serializer_class = SubscriptionReadOutputSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('is_recommended', 'is_liked',)
+    filterset_fields = ('is_recommended',)
 
 
 class DetailSubscriptionApiView(RetrieveApiView):
@@ -27,27 +32,33 @@ class DetailSubscriptionApiView(RetrieveApiView):
     serializer_class = SubscriptionReadOutputSerializer
 
 
-class LikeSubscriptionApiView(CreateApiView):
-    queryset = Subscription.objects.without_trashed()
-    response_serializer_class = SubscriptionReadOutputSerializer
+class FavouriteListApiView(ListApiView):
+    serializer_class = FavouriteOutputSerializer
 
-    def create(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.is_liked = True
-        instance.save()
-        serialized_data = self.response_serializer_class(instance).data
-
-        return Response(serialized_data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        user = self.request.user
+        return Favourite.objects.filter(client=user)
 
 
-class UnLikeSubscriptionApiView(CreateApiView):
-    queryset = Subscription.objects.without_trashed()
-    response_serializer_class = SubscriptionReadOutputSerializer
+class FavouriteCreateApiView(CreateApiView):
+    serializer_class = FavouriteInputSerializer
+    response_serializer_class = FavouriteOutputSerializer
 
-    def create(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.is_liked = False
-        instance.save()
-        serialized_data = self.response_serializer_class(instance).data
+    def get_queryset(self):
+        user = self.request.user
+        return Favourite.objects.filter(client=user)
 
-        return Response(serialized_data, status=status.HTTP_200_OK)
+
+class FavouriteDestroyApiView(DestroyApiView):
+    serializer_class = FavouriteInputSerializer
+
+    def get_object(self):
+        serializer = self.get_serializer(
+            data=self.request.data
+        )
+        serializer.is_valid(raise_exception=False)
+        instance = Favourite.objects.filter(
+            subscription_id=serializer.data['subscription'],
+            client=self.request.user
+        )
+        return instance

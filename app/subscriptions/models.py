@@ -211,12 +211,6 @@ class Subscription(BaseModel):
         null=False,
         default=False,
     )
-    is_liked = models.BooleanField(
-        'Is liked',
-        blank=False,
-        null=False,
-        default=False,
-    )
     image_preview = models.ImageField(
         'Preview Image',
         upload_to='subscriptions/',
@@ -246,6 +240,45 @@ class Subscription(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class Favourite(BaseModel):
+    client = models.ForeignKey(
+        User,
+        verbose_name='Client',
+        related_name='client_favourite',
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+    )
+    subscription = models.ForeignKey(
+        Subscription,
+        verbose_name='Subscription',
+        related_name='subscription_favourite',
+        on_delete=models.RESTRICT,
+        null=False,
+        blank=False,
+    )
+
+    class Meta:
+        verbose_name = 'Favourite'
+        verbose_name_plural = 'Favourites'
+        db_table = 'favourites'
+        ordering = (
+            'id',
+        )
+        constraints = (
+            models.UniqueConstraint(
+                fields=['client', 'subscription'],
+                name='unique_favourite'
+            ),
+        )
+
+    def __repr__(self):
+        return f'Favourite {self.id}'
+
+    def __str__(self):
+        return str(self.id)
 
 
 class Tariff(BaseModel):

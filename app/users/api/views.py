@@ -21,7 +21,7 @@ class ListUserSubscriptionsApi(ListApiView):
     permission_classes = (IsOwner,)
     serializer_class = UserSubscriptionOutputSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('is_liked', 'is_active',)
+    filterset_fields = ('is_active',)
 
     def get_queryset(self):
         return ClientSubscription.objects.filter(client=self.request.user)
