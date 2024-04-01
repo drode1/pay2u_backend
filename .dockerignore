@@ -13,3 +13,5 @@ app/static/*
 app/media/*
 .env.example
 .env
+docker-compose.yml
+docker-compose-prod.yml
