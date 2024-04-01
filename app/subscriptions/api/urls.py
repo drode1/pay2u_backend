@@ -3,6 +3,7 @@ from django.urls import path
 from app.subscriptions.api.views import (
     CategoryListApiView,
     DetailSubscriptionApiView,
+    FavouriteListCreateDestroyApiView,
     SubscriptionListApiView,
 )
 
@@ -23,5 +24,10 @@ subscriptions_urlpatterns = [
         '<int:pk>/',
         DetailSubscriptionApiView.as_view(),
         name='subscription_detail'
+    ),
+    path(
+        'favourites/',
+        FavouriteListCreateDestroyApiView.as_view(),
+        name='favourite_subscription'
     ),
 ]

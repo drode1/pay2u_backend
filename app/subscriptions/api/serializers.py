@@ -4,6 +4,7 @@ from app.subscriptions.models import (
     Cashback,
     Category,
     ClientSubscription,
+    Favourite,
     Invoice,
     Subscription,
     SubscriptionBenefits,
@@ -84,7 +85,10 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_subscription_benefits(obj):
         benefits = SubscriptionBenefits.objects.filter(subscription_id=obj.id)
-        return SubscriptionBenefitsReadOutputSerializer(benefits,many=True).data
+        return SubscriptionBenefitsReadOutputSerializer(
+            benefits,
+            many=True
+        ).data
 
 
 class InvoiceReadOutputSerializer(serializers.ModelSerializer):
@@ -112,4 +116,30 @@ class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
             'expiration_date',
             'is_active',
             'is_auto_pay',
+        )
+
+
+class FavouriteInputSerializer(serializers.ModelSerializer):
+    subscription = serializers.PrimaryKeyRelatedField(
+        queryset=Subscription.objects.without_trashed()
+    )
+    client = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Favourite
+        fields = (
+            'subscription',
+            'client',
+        )
+
+
+class FavouriteOutputSerializer(serializers.ModelSerializer):
+    subscription = SubscriptionReadOutputSerializer()
+
+    class Meta:
+        model = Favourite
+        fields = (
+            'id',
+            'subscription',
+            'client',
         )
