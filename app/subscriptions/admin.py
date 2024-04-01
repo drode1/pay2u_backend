@@ -214,6 +214,7 @@ class SubscriptionAdmin(BaseAdminModel):
                 'fields': (
                     'is_recommended',
                     (
+                        'popularity',
                         'name',
                         'description',
                     ),

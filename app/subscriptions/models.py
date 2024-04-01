@@ -155,7 +155,9 @@ class SubscriptionBenefits(BaseModel):
         upload_to='subscriptions/benefits',
         blank=False,
         null=False,
-        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'svg'])]
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'png', 'svg'])
+        ]
     )
     benefit = models.TextField(
         'Benefit',
@@ -223,6 +225,12 @@ class Subscription(BaseModel):
         blank=False,
         null=False,
     )
+    popularity = models.PositiveIntegerField(
+        'Popularity',
+        blank=False,
+        null=False,
+        default=0
+    )
 
     class Meta:
         verbose_name = 'Subscription'
@@ -240,6 +248,13 @@ class Subscription(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def calculate_popularity(self):
+        count = self.subscription_client_subscription.count()
+        if count > 0:
+            self.popularity = count * self.id * 10
+        else:
+            self.popularity = self.id
 
 
 class Favourite(BaseModel):
