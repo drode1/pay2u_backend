@@ -1,4 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 from app.core.api.generics import (
     CreateApiView,
@@ -23,8 +24,13 @@ class CategoryListApiView(ListApiView):
 class SubscriptionListApiView(ListApiView):
     queryset = Subscription.objects.without_trashed()
     serializer_class = SubscriptionReadOutputSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ('is_recommended',)
+    ordering_fields = (
+        'cashback__amount',
+        'subscription_tariff__amount',
+        'popularity',
+    )
 
 
 class DetailSubscriptionApiView(RetrieveApiView):
