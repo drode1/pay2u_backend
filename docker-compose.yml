@@ -16,6 +16,7 @@ services:
       interval: 10s
       timeout: 3s
       retries: 3
+    container_name: postgres
     networks:
       - default
 
@@ -35,6 +36,7 @@ services:
       - postgres
     links:
       - postgres
+    container_name: django
     networks:
       - default
 
@@ -51,6 +53,7 @@ services:
       - django
     links:
       - django
+    container_name: nginx
     networks:
       - default
 

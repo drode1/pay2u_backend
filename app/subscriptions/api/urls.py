@@ -3,9 +3,10 @@ from django.urls import path
 from app.subscriptions.api.views import (
     CategoryListApiView,
     DetailSubscriptionApiView,
-    LikeSubscriptionApiView,
+    FavouriteCreateApiView,
+    FavouriteDestroyApiView,
+    FavouriteListApiView,
     SubscriptionListApiView,
-    UnLikeSubscriptionApiView,
 )
 
 app_name = 'subscriptions'
@@ -27,13 +28,18 @@ subscriptions_urlpatterns = [
         name='subscription_detail'
     ),
     path(
-        '<int:pk>/like/',
-        LikeSubscriptionApiView.as_view(),
-        name='subscription_like'
+        'favourites/',
+        FavouriteListApiView.as_view(),
+        name='favourite_subscription'
     ),
     path(
-        '<int:pk>/unlike/',
-        UnLikeSubscriptionApiView.as_view(),
-        name='subscription_unlike'
+        'favourites/add/',
+        FavouriteCreateApiView.as_view(),
+        name='add_favourite_subscription'
+    ),
+    path(
+        'favourites/delete/',
+        FavouriteDestroyApiView.as_view(),
+        name='delete_favourite_subscription'
     ),
 ]
