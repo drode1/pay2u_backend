@@ -2,6 +2,7 @@ import secrets
 import string
 from datetime import datetime, timedelta
 
+from django.core.validators import FileExtensionValidator
 from django.db import models
 
 from app.core.models import BaseModel
@@ -149,11 +150,12 @@ class SubscriptionBenefits(BaseModel):
         null=False,
         blank=False,
     )
-    icon = models.ImageField(
+    icon = models.FileField(
         'Icon',
         upload_to='subscriptions/benefits',
         blank=False,
         null=False,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'svg'])]
     )
     benefit = models.TextField(
         'Benefit',
