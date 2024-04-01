@@ -209,12 +209,6 @@ class Subscription(BaseModel):
         null=False,
         default=False,
     )
-    is_liked = models.BooleanField(
-        'Is liked',
-        blank=False,
-        null=False,
-        default=False,
-    )
     image_preview = models.ImageField(
         'Preview Image',
         upload_to='subscriptions/',

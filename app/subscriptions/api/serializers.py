@@ -70,7 +70,6 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
             'image_detail',
             'description',
             'is_recommended',
-            'is_liked',
             'category',
             'cashback',
             'tariffs',

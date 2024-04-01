@@ -191,11 +191,9 @@ class SubscriptionAdmin(BaseAdminModel):
         'cashback',
         'category',
         'is_recommended',
-        'is_liked',
     )
     list_filter = (
         'is_recommended',
-        'is_liked',
         IsDeletedAdminFilter,
     )
     search_fields = (
@@ -215,7 +213,6 @@ class SubscriptionAdmin(BaseAdminModel):
                 ),
                 'fields': (
                     'is_recommended',
-                    'is_liked',
                     (
                         'name',
                         'description',
