@@ -1,6 +1,7 @@
 __pycache__
 *.log
 database
+rabbitmq
 .gitignore
 .pre-commit-config.yaml
 README.md

@@ -360,5 +360,6 @@ GitHub.sublime-settings
 
 .ruff_cache/
 database/
+rabbitmq/
 app/static/*
 app/media/*

@@ -123,3 +123,4 @@ from config.settings.cors import *  # noqa
 from config.settings.rest_framework import *  # noqa
 from config.settings.email import *  # noqa
 from config.settings.jwt import *  # noqa
+from config.settings.celery import *  # noqa
