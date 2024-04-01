@@ -169,17 +169,17 @@ class PromocodeAdmin(BaseAdminModel):
 
 class TariffInlineUserAdmin(admin.TabularInline):
     model = Tariff
-    extra = -1
+    extra = 0
     fk_name = 'subscription'
     min_num = 1
-    max_num = 5
 
 
 class BenefitsInlineUserAdmin(admin.TabularInline):
     model = SubscriptionBenefits
-    extra = -1
-    min_num = 1
-    max_num = 4
+    extra = 0
+    min_num = 0
+    max_num = 5
+    fields = ('icon', 'benefit',)
 
 
 @admin.register(Subscription)
