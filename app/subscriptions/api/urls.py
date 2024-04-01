@@ -3,7 +3,9 @@ from django.urls import path
 from app.subscriptions.api.views import (
     CategoryListApiView,
     DetailSubscriptionApiView,
-    FavouriteListCreateDestroyApiView,
+    FavouriteCreateApiView,
+    FavouriteDestroyApiView,
+    FavouriteListApiView,
     SubscriptionListApiView,
 )
 
@@ -27,7 +29,17 @@ subscriptions_urlpatterns = [
     ),
     path(
         'favourites/',
-        FavouriteListCreateDestroyApiView.as_view(),
+        FavouriteListApiView.as_view(),
         name='favourite_subscription'
+    ),
+    path(
+        'favourites/add/',
+        FavouriteCreateApiView.as_view(),
+        name='add_favourite_subscription'
+    ),
+    path(
+        'favourites/delete/',
+        FavouriteDestroyApiView.as_view(),
+        name='delete_favourite_subscription'
     ),
 ]

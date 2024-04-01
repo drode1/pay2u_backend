@@ -1,6 +1,4 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
-from rest_framework.response import Response
 
 from app.core.api.generics import (
     CreateApiView,
@@ -34,38 +32,33 @@ class DetailSubscriptionApiView(RetrieveApiView):
     serializer_class = SubscriptionReadOutputSerializer
 
 
-class FavouriteListCreateDestroyApiView(
-    ListApiView,
-    CreateApiView,
-    DestroyApiView
-):
+class FavouriteListApiView(ListApiView):
     serializer_class = FavouriteOutputSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Favourite.objects.filter(client=user)
+
+
+class FavouriteCreateApiView(CreateApiView):
+    serializer_class = FavouriteInputSerializer
     response_serializer_class = FavouriteOutputSerializer
 
     def get_queryset(self):
         user = self.request.user
         return Favourite.objects.filter(client=user)
 
-    def get_serializer_class(self):
-        if self.request.method in ('POST', 'DELETE'):
-            return FavouriteInputSerializer
-        return self.serializer_class
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(
-            data=request.data
-        )
-        serializer.is_valid(raise_exception=True)
-        return self.create(request, *args, **kwargs)
+class FavouriteDestroyApiView(DestroyApiView):
+    serializer_class = FavouriteInputSerializer
 
-    def delete(self, request, *args, **kwargs):
+    def get_object(self):
         serializer = self.get_serializer(
-            data=request.data
+            data=self.request.data
         )
         serializer.is_valid(raise_exception=False)
         instance = Favourite.objects.filter(
             subscription_id=serializer.data['subscription'],
-            client=request.user
+            client=self.request.user
         )
-        self.perform_destroy(instance=instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return instance
