@@ -30,7 +30,7 @@ services:
       - ./rabbitmq/rmq-data:/var/lib/rabbitmq
       - ./rabbitmq/rmq-log:/var/log/rabbitmq
     ports:
-      - '${FORWARD_RMQ_PORT:-15672}:15672'
+      - '${FORWARD_RMQ_PORT:-5672}:5672' # TODO: Delete out ports, add management one
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       interval: 30s
