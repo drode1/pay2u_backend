@@ -61,6 +61,9 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
     subscription_benefits = serializers.SerializerMethodField(
         method_name='get_subscription_benefits'
     )
+    is_liked = serializers.SerializerMethodField(
+        method_name='get_is_liked'
+    )
 
     class Meta:
         model = Subscription
@@ -76,6 +79,7 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
             'cashback',
             'tariffs',
             'subscription_benefits',
+            'is_liked',
         )
 
     @staticmethod
@@ -90,6 +94,12 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
             benefits,
             many=True
         ).data
+
+    def get_is_liked(self, obj: Subscription):
+        return obj.subscription_favourite.filter(
+            client=self.context['request'].user,
+        ).exists()
+
 
 
 class InvoiceReadOutputSerializer(serializers.ModelSerializer):
