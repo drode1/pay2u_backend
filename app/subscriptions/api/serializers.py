@@ -98,6 +98,20 @@ class UserSubscriptionCreteInputSerializer(serializers.ModelSerializer):
         return validated_data
 
 
+class UserSubscriptionUpdateInputSerializer(serializers.ModelSerializer):
+    client = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+        write_only=True
+    )
+
+    class Meta:
+        model = ClientSubscription
+        fields = (
+            'is_auto_pay',
+            'client',
+        )
+
+
 class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
     category = CategoryReadOutputSerializer()
     cashback = CashbackReadOutputSerializer()

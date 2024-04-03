@@ -32,7 +32,7 @@ class UpdateApiView(UpdateModelMixin, generics.UpdateAPIView):
 
     response_serializer_class = None
 
-    def partial_update(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         message = 'Partial updates are prohibited'
         raise MethodNotAllowed(method='PATCH', detail=message)
 

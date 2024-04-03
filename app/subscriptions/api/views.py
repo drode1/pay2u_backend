@@ -12,7 +12,6 @@ from app.subscriptions.api.serializers import (
     FavouriteInputSerializer,
     FavouriteOutputSerializer,
     SubscriptionReadOutputSerializer,
-    UserSubscriptionCreteInputSerializer,
 )
 from app.subscriptions.models import Category, Favourite, Subscription
 
@@ -32,11 +31,6 @@ class SubscriptionListApiView(ListApiView):
         'subscription_tariff__amount',
         'popularity',
     )
-
-
-class SubscriptionCreateApiView(CreateApiView):
-    queryset = Subscription.objects.without_trashed()
-    serializer_class = UserSubscriptionCreteInputSerializer
 
 
 class DetailSubscriptionApiView(RetrieveApiView):

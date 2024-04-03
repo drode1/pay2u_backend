@@ -95,7 +95,7 @@ def is_current_user_subscription_exists(client, subscription):
     ).exists()
 
 
-def create_new_user_subscription(data):
+def create_new_user_subscription(data: dict):
     tariff: Tariff = data.get('tariff')
     account = data.get('charge_account')
     subscription: Subscription = data.get('subscription')
