@@ -3,7 +3,10 @@ from rest_framework.exceptions import APIException
 
 
 class CurrentUserSubscriptionExists(APIException):
-    default_detail = 'User has already subscribed to this subscription'
+    default_detail = (
+        'User has already subscribed to this subscription and '
+        'current subscription is not canceled'
+    )
     status_code = status.HTTP_400_BAD_REQUEST
 
 
