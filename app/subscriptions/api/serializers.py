@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from app.subscriptions.api.exceptions import CurrentUserSubscriptionExists
 from app.subscriptions.models import (
     Cashback,
     Category,
@@ -10,6 +11,12 @@ from app.subscriptions.models import (
     SubscriptionBenefits,
     Tariff,
 )
+from app.subscriptions.services import (
+    create_new_user_subscription,
+    is_current_user_subscription_exists,
+    validate_tariff_subscription,
+)
+from app.users.models import User
 
 
 class CategoryReadOutputSerializer(serializers.ModelSerializer):
@@ -49,6 +56,59 @@ class SubscriptionBenefitsReadOutputSerializer(serializers.ModelSerializer):
             'id',
             'icon',
             'benefit',
+        )
+
+
+class UserSubscriptionCreteInputSerializer(serializers.ModelSerializer):
+    subscription = serializers.PrimaryKeyRelatedField(
+        queryset=Subscription.objects.without_trashed(),
+    )
+    tariff = serializers.PrimaryKeyRelatedField(
+        queryset=Tariff.objects.without_trashed()
+    )
+    charge_account = serializers.IntegerField()
+    client = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+        write_only=True
+    )
+
+    class Meta:
+        model = ClientSubscription
+        fields = (
+            'subscription',
+            'tariff',
+            'charge_account',
+            'is_auto_pay',
+            'client',
+        )
+
+    def validate(self, attrs):
+        subscription: Subscription = attrs.get('subscription')
+        tariff: Tariff = attrs.get('tariff')
+        client: User = attrs.get('client')
+
+        validate_tariff_subscription(tariff.id, subscription.id)
+        if is_current_user_subscription_exists(client, subscription):
+            raise CurrentUserSubscriptionExists
+
+        return attrs
+
+    def create(self, validated_data):
+        create_new_user_subscription(validated_data)
+        return validated_data
+
+
+class UserSubscriptionUpdateInputSerializer(serializers.ModelSerializer):
+    client = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+        write_only=True
+    )
+
+    class Meta:
+        model = ClientSubscription
+        fields = (
+            'is_auto_pay',
+            'client',
         )
 
 
@@ -133,6 +193,7 @@ class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
             'is_active',
             'is_auto_pay',
             'cashback_amount',
+            'deleted_at',
         )
 
     def get_cashback_amount(self, obj):

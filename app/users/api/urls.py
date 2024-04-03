@@ -1,6 +1,12 @@
 from django.urls import path
 
-from app.users.api.views import DetailUserApi, ListUserSubscriptionsApi
+from app.users.api.views import (
+    DetailUserApi,
+    ListUserSubscriptionsApi,
+    SubscriptionCancelApiView,
+    SubscriptionCreateApiView,
+    SubscriptionUpdateApiView,
+)
 
 app_name = 'clients'
 
@@ -14,5 +20,20 @@ user_patterns = [
         '<int:pk>/subscriptions/',
         ListUserSubscriptionsApi.as_view(),
         name='subscription_list'
+    ),
+    path(
+        'subscriptions/create/',
+        SubscriptionCreateApiView.as_view(),
+        name='subscription_create'
+    ),
+    path(
+        '<int:pk>/subscriptions/<int:subscription_id>/update/',
+        SubscriptionUpdateApiView.as_view(),
+        name='subscription_update'
+    ),
+    path(
+        '<int:pk>/subscriptions/<int:subscription_id>/delete/',
+        SubscriptionCancelApiView.as_view(),
+        name='subscription_delete'
     ),
 ]

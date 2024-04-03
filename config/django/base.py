@@ -115,8 +115,14 @@ MEDIA_ROOT = Path(APPS_DIR) / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
+
 DEFAULT_MAX_LENGTH_FIELD = 255
 MAX_NAME_LENGTH = 20
+
+MIN_CASHBACK_VALUE = 1
+MAX_CASHBACK_VALUE = 99
+
+MIN_AMOUNT_VALUE = 1
 
 from config.settings.logs import *  # noqa
 from config.settings.cors import *  # noqa

@@ -54,8 +54,10 @@ class SoftDestroyModelMixin:
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        if self.response_serializer_class:
+            serializer = self.response_serializer_class(instance)
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def perform_destroy(self, instance):
         instance.soft_delete()
