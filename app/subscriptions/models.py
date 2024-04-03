@@ -39,17 +39,15 @@ class Category(BaseModel):
         return self.name
 
 
-MIN_VALUE = 1.0
-MAX_VALUE = 99.9
+MIN_VALUE = 1
+MAX_VALUE = 99
 
 
 class Cashback(BaseModel):
-    amount = models.DecimalField(
+    amount = models.PositiveSmallIntegerField(
         'Amount',
         null=False,
         blank=False,
-        max_digits=3,
-        decimal_places=1,
         validators=[
             MinValueValidator(MIN_VALUE),
             MaxValueValidator(MAX_VALUE)
