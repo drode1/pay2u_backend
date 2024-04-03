@@ -193,6 +193,7 @@ class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
             'is_active',
             'is_auto_pay',
             'cashback_amount',
+            'deleted_at',
         )
 
     def get_cashback_amount(self, obj):

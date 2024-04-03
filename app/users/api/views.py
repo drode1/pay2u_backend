@@ -12,6 +12,7 @@ from app.subscriptions.api.serializers import (
     UserSubscriptionUpdateInputSerializer,
 )
 from app.subscriptions.models import ClientSubscription, Subscription
+from app.users.api.filters import IsDeletedFilter
 from app.users.api.permissions import IsOwner
 from app.users.api.serializers import UserReadOutputSerializer
 from app.users.models import User
@@ -28,6 +29,7 @@ class ListUserSubscriptionsApi(ListApiView):
     serializer_class = UserSubscriptionOutputSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ('is_active',)
+    filterset_class = IsDeletedFilter
 
     def get_queryset(self):
         return ClientSubscription.objects.filter(client=self.request.user)

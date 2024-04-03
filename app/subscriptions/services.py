@@ -91,7 +91,8 @@ def is_current_user_subscription_exists(client, subscription):
     return ClientSubscription.objects.without_trashed().filter(
         client=client,
         subscription=subscription,
-        is_active=True
+        is_active=True,
+        deleted_at__isnull=True
     ).exists()
 
 
