@@ -118,6 +118,9 @@ class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
     subscription = SubscriptionReadOutputSerializer()
     tariff = TariffReadOutputSerializer()
     invoice = InvoiceReadOutputSerializer()
+    cashback_amount = serializers.SerializerMethodField(
+        method_name='get_cashback_amount'
+    )
 
     class Meta:
         model = ClientSubscription
@@ -129,7 +132,14 @@ class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
             'expiration_date',
             'is_active',
             'is_auto_pay',
+            'cashback_amount',
         )
+
+    def get_cashback_amount(self, obj):
+        tariff_amount = obj.tariff.amount
+        cashback_percent = obj.subscription.cashback.amount
+        cashback_amount = (tariff_amount * cashback_percent) // 100
+        return cashback_amount
 
 
 class FavouriteInputSerializer(serializers.ModelSerializer):
