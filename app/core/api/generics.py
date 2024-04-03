@@ -46,6 +46,8 @@ class DestroyApiView(generics.DestroyAPIView):
 class SoftDestroyApiView(SoftDestroyModelMixin, generics.GenericAPIView):
     """ Abstract generic Soft Destroy API class """
 
+    response_serializer_class = None
+
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
