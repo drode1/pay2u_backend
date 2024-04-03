@@ -458,9 +458,17 @@ class ClientSubscription(BaseModel):
     def clean(self):
         super().clean()
 
-        # Check that tariff is linked to concrete subscription
+        """
+        Check that tariff is linked to concrete subscription,
+        but we don`t check that the tariff is deleted,
+        because archive tariffs may exist
+        """
         from app.subscriptions.services import (
             validate_tariff_subscription,
         )
-        validate_tariff_subscription(self.tariff.id, self.subscription.id)
+        validate_tariff_subscription(
+            self.tariff.id,
+            self.subscription.id,
+            False
+        )
         self.check_subscription_period()

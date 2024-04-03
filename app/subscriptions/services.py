@@ -24,14 +24,19 @@ def create_invoice_with_tariff_amount(tariff_amount: int) -> Invoice:
 
 
 def validate_tariff_subscription(
-        tariff_id: int, subscription_id: int
+        tariff_id: Tariff.pk,
+        subscription_id: Subscription.pk,
+        is_deleted: bool = True
 ) -> QuerySet[Tariff]:
     from app.subscriptions.models import Tariff
 
-    tariffs = Tariff.objects.filter(
-        id=tariff_id,
-        subscription_id=subscription_id
-    )
+    kwargs = {
+        'id': tariff_id,
+        'subscription_id': subscription_id,
+        'deleted_at__isnull': is_deleted
+    }
+
+    tariffs = Tariff.objects.filter(**kwargs)
 
     if not tariffs.exists():
         raise ValidationError(

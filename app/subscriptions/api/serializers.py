@@ -87,7 +87,11 @@ class UserSubscriptionCreteInputSerializer(serializers.ModelSerializer):
         tariff: Tariff = attrs.get('tariff')
         client: User = attrs.get('client')
 
-        validate_tariff_subscription(tariff.id, subscription.id)
+        validate_tariff_subscription(
+            tariff.id,
+            subscription.id,
+            True,
+        )
         if is_current_user_subscription_exists(client, subscription):
             raise CurrentUserSubscriptionExists
 
