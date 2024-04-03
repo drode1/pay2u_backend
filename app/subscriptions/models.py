@@ -2,6 +2,7 @@ import secrets
 import string
 from datetime import datetime, timedelta
 
+from django.conf import settings as s
 from django.core.validators import (
     FileExtensionValidator,
     MaxValueValidator,
@@ -39,18 +40,14 @@ class Category(BaseModel):
         return self.name
 
 
-MIN_VALUE = 1
-MAX_VALUE = 99
-
-
 class Cashback(BaseModel):
     amount = models.PositiveSmallIntegerField(
         'Amount',
         null=False,
         blank=False,
         validators=[
-            MinValueValidator(MIN_VALUE),
-            MaxValueValidator(MAX_VALUE)
+            MinValueValidator(s.MIN_CASHBACK_VALUE),
+            MaxValueValidator(s.MAX_CASHBACK_VALUE)
         ],
     )
 
@@ -65,7 +62,8 @@ class Cashback(BaseModel):
 
         constraints = (
             CheckConstraint(
-                check=Q(amount__gte=MIN_VALUE) & Q(amount__lte=MAX_VALUE),
+                check=Q(amount__gte=s.MIN_CASHBACK_VALUE) & Q(
+                    amount__lte=s.MAX_CASHBACK_VALUE),
                 name='min_max_range'),
         )
 
@@ -77,10 +75,13 @@ class Cashback(BaseModel):
 
 
 class Invoice(BaseModel):
-    amount = models.FloatField(
+    amount = models.PositiveIntegerField(
         'Amount',
         null=False,
-        blank=False
+        blank=False,
+        validators=[
+            MinValueValidator(s.MIN_AMOUNT_VALUE),
+        ],
     )
     date = models.DateTimeField(
         'Date',
@@ -331,10 +332,13 @@ class Tariff(BaseModel):
         null=False,
         blank=False,
     )
-    amount = models.FloatField(
+    amount = models.PositiveIntegerField(
         'Amount',
         null=False,
-        blank=False
+        blank=False,
+        validators=[
+            MinValueValidator(s.MIN_AMOUNT_VALUE),
+        ],
     )
     description = models.TextField(
         'Description',
