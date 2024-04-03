@@ -4,6 +4,7 @@ from app.core.api.generics import (
     CreateApiView,
     ListApiView,
     RetrieveApiView,
+    SoftDestroyApiView,
     UpdateApiView,
 )
 from app.subscriptions.api.serializers import (
@@ -51,3 +52,14 @@ class SubscriptionUpdateApiView(UpdateApiView):
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
+
+class SubscriptionCancelApiView(SoftDestroyApiView):
+    serializer_class = UserSubscriptionOutputSerializer
+
+    def get_object(self):
+        instance = ClientSubscription.objects.filter(
+            id=self.kwargs.get('subscription_id'),
+            client=self.request.user
+        ).get()
+        return instance
