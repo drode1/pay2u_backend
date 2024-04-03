@@ -2,8 +2,13 @@ import secrets
 import string
 from datetime import datetime, timedelta
 
-from django.core.validators import FileExtensionValidator
+from django.core.validators import (
+    FileExtensionValidator,
+    MaxValueValidator,
+    MinValueValidator,
+)
 from django.db import models
+from django.db.models import CheckConstraint, Q
 
 from app.core.models import BaseModel
 from app.subscriptions.enums import SubscriptionPeriod
@@ -34,11 +39,21 @@ class Category(BaseModel):
         return self.name
 
 
+MIN_VALUE = 1.0
+MAX_VALUE = 99.9
+
+
 class Cashback(BaseModel):
-    amount = models.FloatField(
+    amount = models.DecimalField(
         'Amount',
         null=False,
-        blank=False
+        blank=False,
+        max_digits=3,
+        decimal_places=1,
+        validators=[
+            MinValueValidator(MIN_VALUE),
+            MaxValueValidator(MAX_VALUE)
+        ],
     )
 
     class Meta:
@@ -48,6 +63,12 @@ class Cashback(BaseModel):
         ordering = (
             'id',
             'amount',
+        )
+
+        constraints = (
+            CheckConstraint(
+                check=Q(amount__gte=MIN_VALUE) & Q(amount__lte=MAX_VALUE),
+                name='min_max_range'),
         )
 
     def __repr__(self):
