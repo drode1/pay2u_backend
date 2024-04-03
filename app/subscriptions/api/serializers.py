@@ -96,10 +96,12 @@ class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
         ).data
 
     def get_is_liked(self, obj: Subscription):
+        request = self.context.get('request')
+        if not request:
+            return True
         return obj.subscription_favourite.filter(
-            client=self.context['request'].user,
+            client=request.user,
         ).exists()
-
 
 
 class InvoiceReadOutputSerializer(serializers.ModelSerializer):
