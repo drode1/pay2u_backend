@@ -33,7 +33,9 @@ class ListUserSubscriptionsApi(ListApiView):
     filterset_class = IsDeletedFilter
 
     def get_queryset(self):
-        return ClientSubscription.objects.filter(client=self.request.user)
+        return ClientSubscription.objects.filter(
+            client=self.request.user
+        ).order_by('expiration_date')
 
 
 class SubscriptionCreateApiView(CreateApiView):
