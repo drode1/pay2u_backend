@@ -115,9 +115,24 @@ class UserSubscriptionUpdateInputSerializer(serializers.ModelSerializer):
             'client',
         )
 
-
-class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
+class SubscriptionBaseReadOutputSerializer(serializers.ModelSerializer):
     category = CategoryReadOutputSerializer()
+
+    class Meta:
+        model = Subscription
+        fields = (
+            'id',
+            'popularity',
+            'name',
+            'image_preview',
+            'image_detail',
+            'description',
+            'is_recommended',
+            'category',
+        )
+
+
+class SubscriptionReadOutputSerializer(SubscriptionBaseReadOutputSerializer):
     cashback = CashbackReadOutputSerializer()
     tariffs = serializers.SerializerMethodField(
         method_name='get_tariffs'
@@ -179,7 +194,7 @@ class InvoiceReadOutputSerializer(serializers.ModelSerializer):
 
 
 class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
-    subscription = SubscriptionReadOutputSerializer()
+    subscription = SubscriptionBaseReadOutputSerializer()
     tariff = TariffReadOutputSerializer()
     invoice = InvoiceReadOutputSerializer()
     cashback_amount = serializers.SerializerMethodField(
