@@ -107,7 +107,7 @@ def create_new_user_subscription(data: dict):
     subscription: Subscription = data.get('subscription')
     client: User = data.get('client')
 
-    payment_amount = tariff.amount * (tariff.days_amount // 12)
+    payment_amount = tariff.amount * (tariff.days_amount // 30)
 
     process_payment(account, payment_amount)
     new_subscription = create_subscription(
