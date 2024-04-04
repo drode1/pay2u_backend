@@ -6,7 +6,10 @@ from django.db import transaction
 from django.db.models import QuerySet
 
 from app.subscriptions import enums
-from app.subscriptions.api.exceptions import PaymentException
+from app.subscriptions.api.exceptions import (
+    PaymentException,
+    WrongCashbackStatusException,
+)
 from app.subscriptions.models import (
     ClientCashbackHistory,
     ClientSubscription,
@@ -120,7 +123,8 @@ def create_new_user_subscription(data: dict):
         data.get('is_auto_pay'),
     )
 
-    set_client_cashback(client, subscription.cashback.amount, payment_amount)
+    set_client_cashback(client, new_subscription, subscription.cashback.amount,
+                        payment_amount)
 
     return new_subscription
 
@@ -169,6 +173,7 @@ def calculate_cashback_amount(amount: int, percent: int):
 
 def set_client_cashback(
         client: User,
+        subscription: ClientSubscription,
         cashback_percent: int,
         amount: int
 ) -> None:
@@ -177,7 +182,18 @@ def set_client_cashback(
     ClientCashbackHistory.objects.create(
         client=client,
         amount=cashback_amount,
-        status=enums.CashbackHistoryStatus.PENDING
+        status=enums.CashbackHistoryStatus.PENDING,
+        client_subscription=subscription
     )
 
     return None
+
+
+def update_cashback_history_status(
+        instance: ClientCashbackHistory,
+        status: enums.CashbackHistoryStatus.choices
+):
+    if instance.status != enums.CashbackHistoryStatus.PENDING.value:
+        raise WrongCashbackStatusException
+    instance.status = status
+    instance.save()

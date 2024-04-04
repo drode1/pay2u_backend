@@ -20,7 +20,8 @@ from app.subscriptions.models import (
 )
 from app.users.api.filters import IsDeletedFilter
 from app.users.api.serializers import (
-    UserCashbackHistorySerializer,
+    UserCashbackHistoryInputSerializer,
+    UserCashbackHistoryOutputSerializer,
     UserReadOutputSerializer,
 )
 from app.users.models import User
@@ -46,12 +47,27 @@ class ListUserSubscriptionsApi(ListApiView):
 
 
 class ListUserCashbackHistoryApi(ListApiView):
-    serializer_class = UserCashbackHistorySerializer
+    serializer_class = UserCashbackHistoryOutputSerializer
 
     def get_queryset(self):
         return ClientCashbackHistory.objects.filter(
             client=self.request.user
         ).order_by('-created_at')
+
+
+class CashbackHistoryUpdateStatusApiView(UpdateApiView):
+    serializer_class = UserCashbackHistoryInputSerializer
+    response_serializer_class = UserCashbackHistoryOutputSerializer
+
+    def get_object(self):
+        filters = {
+            'id': self.kwargs.get('cashback_id'),
+            'client': self.request.user
+        }
+        return get_object_or_404(ClientCashbackHistory, **filters)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 
 
 class SubscriptionCreateApiView(CreateApiView):

@@ -498,6 +498,14 @@ class ClientCashbackHistory(BaseModel):
         choices=CashbackHistoryStatus.choices,
         default=CashbackHistoryStatus.PENDING.value
     )
+    client_subscription = models.ForeignKey(
+        ClientSubscription,
+        verbose_name='Client subscription',
+        related_name='client_subscription_cashback_history',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=False,
+    )
 
     class Meta:
         verbose_name = 'Client cashback history'

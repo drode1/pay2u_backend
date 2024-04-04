@@ -1,6 +1,7 @@
 from django.urls import path
 
 from app.users.api.views import (
+    CashbackHistoryUpdateStatusApiView,
     DetailUserApi,
     ListUserCashbackHistoryApi,
     ListUserSubscriptionsApi,
@@ -25,7 +26,12 @@ user_patterns = [
     path(
         'cashback-history/',
         ListUserCashbackHistoryApi.as_view(),
-        name='subscription_list'
+        name='cashback_history_list'
+    ),
+    path(
+        'cashback-history/<int:cashback_id>/change-status/',
+        CashbackHistoryUpdateStatusApiView.as_view(),
+        name='cashback_history_update'
     ),
     path(
         'subscriptions/create/',
