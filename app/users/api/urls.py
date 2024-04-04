@@ -13,17 +13,17 @@ app_name = 'clients'
 
 user_patterns = [
     path(
-        '<int:pk>/',
+        'me/',
         DetailUserApi.as_view(),
         name='detail'
     ),
     path(
-        '<int:pk>/subscriptions/',
+        'subscriptions/',
         ListUserSubscriptionsApi.as_view(),
         name='subscription_list'
     ),
     path(
-        '<int:pk>/cashback-history/',
+        'cashback-history/',
         ListUserCashbackHistoryApi.as_view(),
         name='subscription_list'
     ),
@@ -33,12 +33,12 @@ user_patterns = [
         name='subscription_create'
     ),
     path(
-        '<int:pk>/subscriptions/<int:subscription_id>/update/',
+        'subscriptions/<int:subscription_id>/update/',
         SubscriptionUpdateApiView.as_view(),
         name='subscription_update'
     ),
     path(
-        '<int:pk>/subscriptions/<int:subscription_id>/delete/',
+        'subscriptions/<int:subscription_id>/delete/',
         SubscriptionCancelApiView.as_view(),
         name='subscription_delete'
     ),

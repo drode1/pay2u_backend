@@ -1,4 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.generics import get_object_or_404
 
 from app.core.api.generics import (
     CreateApiView,
@@ -18,7 +19,6 @@ from app.subscriptions.models import (
     Subscription,
 )
 from app.users.api.filters import IsDeletedFilter
-from app.users.api.permissions import IsOwner
 from app.users.api.serializers import (
     UserCashbackHistorySerializer,
     UserReadOutputSerializer,
@@ -27,10 +27,10 @@ from app.users.models import User
 
 
 class DetailUserApi(RetrieveApiView):
-    queryset = User.objects.all()
     serializer_class = UserReadOutputSerializer
-    permission_classes = (IsOwner,)
-    lookup_field = 'pk'
+
+    def get_object(self):
+        return User.objects.filter(pk=self.request.user.pk).get()
 
 
 class ListUserSubscriptionsApi(ListApiView):
@@ -62,11 +62,12 @@ class SubscriptionCreateApiView(CreateApiView):
 class SubscriptionUpdateApiView(UpdateApiView):
     serializer_class = UserSubscriptionUpdateInputSerializer
 
-    def get_queryset(self):
-        return ClientSubscription.objects.filter(
-            id=self.kwargs.get('subscription_id'),
-            client=self.request.user
-        )
+    def get_object(self):
+        filters = {
+            'id': self.kwargs.get('subscription_id'),
+            'client': self.request.user
+        }
+        return get_object_or_404(ClientSubscription, **filters)
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
@@ -76,8 +77,9 @@ class SubscriptionCancelApiView(SoftDestroyApiView):
     serializer_class = UserSubscriptionOutputSerializer
 
     def get_object(self):
-        instance = ClientSubscription.objects.filter(
-            id=self.kwargs.get('subscription_id'),
-            client=self.request.user
-        ).get()
+        filters = {
+            'id': self.kwargs.get('subscription_id'),
+            'client': self.request.user
+        }
+        instance = get_object_or_404(ClientSubscription, **filters)
         return instance
