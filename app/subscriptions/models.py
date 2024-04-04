@@ -12,7 +12,7 @@ from django.db import models
 from django.db.models import CheckConstraint, Q
 
 from app.core.models import BaseModel
-from app.subscriptions.enums import SubscriptionPeriod
+from app.subscriptions.enums import CashbackHistoryStatus, SubscriptionPeriod
 from app.users.models import User
 
 
@@ -472,3 +472,46 @@ class ClientSubscription(BaseModel):
             False
         )
         self.check_subscription_period()
+
+
+class ClientCashbackHistory(BaseModel):
+    client = models.ForeignKey(
+        User,
+        verbose_name='Client',
+        related_name='client_cashback_history',
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+    )
+    amount = models.PositiveIntegerField(
+        'Amount',
+        null=False,
+        blank=False,
+        validators=[
+            MinValueValidator(s.MIN_AMOUNT_VALUE),
+        ],
+    )
+    status = models.CharField(
+        'Cashback status',
+        blank=False,
+        null=False,
+        choices=CashbackHistoryStatus.choices,
+        default=CashbackHistoryStatus.PENDING.value
+    )
+
+    class Meta:
+        verbose_name = 'Client cashback history'
+        verbose_name_plural = 'Client cashback histories'
+        db_table = 'client_cashback_history'
+        ordering = (
+            'id',
+            'amount',
+            'client',
+            'status',
+        )
+
+    def __repr__(self):
+        return f'Client cashback {self.id}'
+
+    def __str__(self):
+        return str(self.id)

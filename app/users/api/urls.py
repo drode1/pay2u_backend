@@ -2,6 +2,7 @@ from django.urls import path
 
 from app.users.api.views import (
     DetailUserApi,
+    ListUserCashbackHistoryApi,
     ListUserSubscriptionsApi,
     SubscriptionCancelApiView,
     SubscriptionCreateApiView,
@@ -19,6 +20,11 @@ user_patterns = [
     path(
         '<int:pk>/subscriptions/',
         ListUserSubscriptionsApi.as_view(),
+        name='subscription_list'
+    ),
+    path(
+        '<int:pk>/cashback-history/',
+        ListUserCashbackHistoryApi.as_view(),
         name='subscription_list'
     ),
     path(

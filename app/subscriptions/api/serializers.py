@@ -12,6 +12,7 @@ from app.subscriptions.models import (
     Tariff,
 )
 from app.subscriptions.services import (
+    calculate_cashback_amount,
     create_new_user_subscription,
     is_current_user_subscription_exists,
     validate_tariff_subscription,
@@ -115,6 +116,7 @@ class UserSubscriptionUpdateInputSerializer(serializers.ModelSerializer):
             'client',
         )
 
+
 class SubscriptionBaseReadOutputSerializer(serializers.ModelSerializer):
     category = CategoryReadOutputSerializer()
 
@@ -216,10 +218,10 @@ class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
         )
 
     def get_cashback_amount(self, obj):
-        tariff_amount = obj.tariff.amount
-        cashback_percent = obj.subscription.cashback.amount
-        cashback_amount = (tariff_amount * cashback_percent) // 100
-        return cashback_amount
+        return calculate_cashback_amount(
+            obj.tariff.amount,
+            obj.subscription.cashback.amount
+        )
 
 
 class FavouriteInputSerializer(serializers.ModelSerializer):

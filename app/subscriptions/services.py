@@ -5,8 +5,10 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import QuerySet
 
+from app.subscriptions import enums
 from app.subscriptions.api.exceptions import PaymentException
 from app.subscriptions.models import (
+    ClientCashbackHistory,
     ClientSubscription,
     Invoice,
     Promocode,
@@ -118,6 +120,8 @@ def create_new_user_subscription(data: dict):
         data.get('is_auto_pay'),
     )
 
+    set_client_cashback(client, subscription.cashback.amount, payment_amount)
+
     return new_subscription
 
 
@@ -157,3 +161,23 @@ def process_payment(account: int, amount: int):
 
 def charge_money(account: int, amount: int):
     ...
+
+
+def calculate_cashback_amount(amount: int, percent: int):
+    return (amount * percent) // 100
+
+
+def set_client_cashback(
+        client: User,
+        cashback_percent: int,
+        amount: int
+) -> None:
+    cashback_amount = calculate_cashback_amount(amount, cashback_percent)
+
+    ClientCashbackHistory.objects.create(
+        client=client,
+        amount=cashback_amount,
+        status=enums.CashbackHistoryStatus.PENDING
+    )
+
+    return None

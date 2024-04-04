@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from app.subscriptions.models import ClientCashbackHistory
 from app.users.models import User
 
 
@@ -29,3 +30,15 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
 
     def get_month_cashback(self, obj: User):
         return obj.get_month_cashback
+
+
+class UserCashbackHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClientCashbackHistory
+        fields = (
+            'id',
+            'client',
+            'amount',
+            'status',
+            'created_at',
+        )

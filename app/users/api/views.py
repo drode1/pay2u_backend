@@ -12,10 +12,17 @@ from app.subscriptions.api.serializers import (
     UserSubscriptionOutputSerializer,
     UserSubscriptionUpdateInputSerializer,
 )
-from app.subscriptions.models import ClientSubscription, Subscription
+from app.subscriptions.models import (
+    ClientCashbackHistory,
+    ClientSubscription,
+    Subscription,
+)
 from app.users.api.filters import IsDeletedFilter
 from app.users.api.permissions import IsOwner
-from app.users.api.serializers import UserReadOutputSerializer
+from app.users.api.serializers import (
+    UserCashbackHistorySerializer,
+    UserReadOutputSerializer,
+)
 from app.users.models import User
 
 
@@ -36,6 +43,15 @@ class ListUserSubscriptionsApi(ListApiView):
         return ClientSubscription.objects.filter(
             client=self.request.user
         ).order_by('expiration_date')
+
+
+class ListUserCashbackHistoryApi(ListApiView):
+    serializer_class = UserCashbackHistorySerializer
+
+    def get_queryset(self):
+        return ClientCashbackHistory.objects.filter(
+            client=self.request.user
+        ).order_by('-created_at')
 
 
 class SubscriptionCreateApiView(CreateApiView):

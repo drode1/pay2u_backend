@@ -6,3 +6,9 @@ class SubscriptionPeriod(models.IntegerChoices):
     THREE_MONTH = 90, '3 месяца'
     SIX_MONTH = 180, '6 месяцев'
     TWELVE_MONTH = 360, '12 месяцев'
+
+
+class CashbackHistoryStatus(models.TextChoices):
+    CANCELLED = 'cancelled', 'Отменен'
+    PENDING = 'pending', 'Ожидание'
+    CREDITED = 'credited', 'Начислен'
