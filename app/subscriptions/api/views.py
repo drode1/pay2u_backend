@@ -24,12 +24,21 @@ class CategoryListApiView(ListApiView):
 class SubscriptionListApiView(ListApiView):
     queryset = Subscription.objects.without_trashed()
     serializer_class = SubscriptionReadOutputSerializer
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filter_backends = (
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter
+    )
     filterset_fields = ('is_recommended',)
     ordering_fields = (
         'cashback__amount',
         'subscription_tariff__amount',
         'popularity',
+    )
+    search_fields = (
+        'name',
+        'description',
+        'category__name',
     )
 
 
