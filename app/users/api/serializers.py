@@ -34,7 +34,7 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
             'phone',
             'subscriptions_count',
             'month_cashback',
-            'accounts',
+            'bank_accounts',
         )
 
     def get_subscriptions_count(self, obj: User):
