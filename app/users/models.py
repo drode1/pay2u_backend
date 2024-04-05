@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
@@ -137,6 +139,7 @@ class User(AbstractUser):
 
     @property
     def get_month_cashback(self):
-        subscriptions = self.get_active_subscriptions()
-        return subscriptions.aggregate(
-            cashback=Sum('subscription__cashback__amount'))['cashback']
+        cashback = self.client_cashback_history.filter(
+            created_at__month=datetime.now().month
+        ).aggregate(cashback=Sum('amount')).get('cashback')
+        return cashback or 0

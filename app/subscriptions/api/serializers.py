@@ -12,6 +12,7 @@ from app.subscriptions.models import (
     Tariff,
 )
 from app.subscriptions.services import (
+    calculate_cashback_amount,
     create_new_user_subscription,
     is_current_user_subscription_exists,
     validate_tariff_subscription,
@@ -116,8 +117,24 @@ class UserSubscriptionUpdateInputSerializer(serializers.ModelSerializer):
         )
 
 
-class SubscriptionReadOutputSerializer(serializers.ModelSerializer):
+class SubscriptionBaseReadOutputSerializer(serializers.ModelSerializer):
     category = CategoryReadOutputSerializer()
+
+    class Meta:
+        model = Subscription
+        fields = (
+            'id',
+            'popularity',
+            'name',
+            'image_preview',
+            'image_detail',
+            'description',
+            'is_recommended',
+            'category',
+        )
+
+
+class SubscriptionReadOutputSerializer(SubscriptionBaseReadOutputSerializer):
     cashback = CashbackReadOutputSerializer()
     tariffs = serializers.SerializerMethodField(
         method_name='get_tariffs'
@@ -179,7 +196,7 @@ class InvoiceReadOutputSerializer(serializers.ModelSerializer):
 
 
 class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
-    subscription = SubscriptionReadOutputSerializer()
+    subscription = SubscriptionBaseReadOutputSerializer()
     tariff = TariffReadOutputSerializer()
     invoice = InvoiceReadOutputSerializer()
     cashback_amount = serializers.SerializerMethodField(
@@ -201,10 +218,10 @@ class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
         )
 
     def get_cashback_amount(self, obj):
-        tariff_amount = obj.tariff.amount
-        cashback_percent = obj.subscription.cashback.amount
-        cashback_amount = (tariff_amount * cashback_percent) // 100
-        return cashback_amount
+        return calculate_cashback_amount(
+            obj.tariff.amount,
+            obj.subscription.cashback.amount
+        )
 
 
 class FavouriteInputSerializer(serializers.ModelSerializer):

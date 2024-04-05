@@ -5,8 +5,13 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import QuerySet
 
-from app.subscriptions.api.exceptions import PaymentException
+from app.subscriptions import enums
+from app.subscriptions.api.exceptions import (
+    PaymentException,
+    WrongCashbackStatusException,
+)
 from app.subscriptions.models import (
+    ClientCashbackHistory,
     ClientSubscription,
     Invoice,
     Promocode,
@@ -107,7 +112,7 @@ def create_new_user_subscription(data: dict):
     subscription: Subscription = data.get('subscription')
     client: User = data.get('client')
 
-    payment_amount = tariff.amount * (tariff.days_amount // 12)
+    payment_amount = tariff.amount * (tariff.days_amount // 30)
 
     process_payment(account, payment_amount)
     new_subscription = create_subscription(
@@ -117,6 +122,9 @@ def create_new_user_subscription(data: dict):
         payment_amount,
         data.get('is_auto_pay'),
     )
+
+    set_client_cashback(client, new_subscription, subscription.cashback.amount,
+                        payment_amount)
 
     return new_subscription
 
@@ -157,3 +165,35 @@ def process_payment(account: int, amount: int):
 
 def charge_money(account: int, amount: int):
     ...
+
+
+def calculate_cashback_amount(amount: int, percent: int):
+    return (amount * percent) // 100
+
+
+def set_client_cashback(
+        client: User,
+        subscription: ClientSubscription,
+        cashback_percent: int,
+        amount: int
+) -> None:
+    cashback_amount = calculate_cashback_amount(amount, cashback_percent)
+
+    ClientCashbackHistory.objects.create(
+        client=client,
+        amount=cashback_amount,
+        status=enums.CashbackHistoryStatus.PENDING,
+        client_subscription=subscription
+    )
+
+    return None
+
+
+def update_cashback_history_status(
+        instance: ClientCashbackHistory,
+        status: enums.CashbackHistoryStatus.choices
+):
+    if instance.status != enums.CashbackHistoryStatus.PENDING.value:
+        raise WrongCashbackStatusException
+    instance.status = status
+    instance.save()

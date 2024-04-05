@@ -1,5 +1,8 @@
 from rest_framework import serializers
 
+from app.subscriptions.api.serializers import SubscriptionBaseReadOutputSerializer
+from app.subscriptions.models import ClientCashbackHistory
+from app.subscriptions.services import update_cashback_history_status
 from app.users.models import User
 
 
@@ -29,3 +32,44 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
 
     def get_month_cashback(self, obj: User):
         return obj.get_month_cashback
+
+
+class UserCashbackHistoryInputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClientCashbackHistory
+        fields = (
+            'status',
+        )
+
+    def update(self, instance, validated_data):
+        update_cashback_history_status(instance, validated_data.get('status'))
+        return instance
+
+
+class UserCashbackHistoryOutputSerializer(serializers.ModelSerializer):
+    invoice_id = serializers.SerializerMethodField(
+        method_name='get_invoice_id'
+    )
+    subscription = serializers.SerializerMethodField(
+        method_name='get_subscription'
+    )
+
+    class Meta:
+        model = ClientCashbackHistory
+        fields = (
+            'id',
+            'client',
+            'amount',
+            'status',
+            'subscription',
+            'invoice_id',
+            'created_at',
+        )
+
+    def get_invoice_id(self, obj):
+        return obj.client_subscription.invoice.id
+
+    def get_subscription(self, obj):
+        return SubscriptionBaseReadOutputSerializer(
+            obj.client_subscription.subscription, many=False
+        ).data

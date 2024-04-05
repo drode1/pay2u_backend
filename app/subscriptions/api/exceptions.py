@@ -13,3 +13,7 @@ class CurrentUserSubscriptionExists(APIException):
 class PaymentException(APIException):
     default_detail = 'Error occurred while processing payment'
     status_code = status.HTTP_400_BAD_REQUEST
+
+class WrongCashbackStatusException(APIException):
+    default_detail = 'Wrong cashback status'
+    status_code = status.HTTP_400_BAD_REQUEST
