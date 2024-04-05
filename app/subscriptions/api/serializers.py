@@ -67,7 +67,7 @@ class UserSubscriptionCreteInputSerializer(serializers.ModelSerializer):
     tariff = serializers.PrimaryKeyRelatedField(
         queryset=Tariff.objects.without_trashed()
     )
-    charge_account = serializers.IntegerField()
+    charge_account = serializers.CharField()
     client = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),
         write_only=True

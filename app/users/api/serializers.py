@@ -6,12 +6,20 @@ from app.subscriptions.services import update_cashback_history_status
 from app.users.models import User
 
 
+class UserBankAccountSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    number = serializers.CharField()
+
+
 class UserReadOutputSerializer(serializers.ModelSerializer):
     subscriptions_count = serializers.SerializerMethodField(
         method_name='get_subscriptions_count'
     )
     month_cashback = serializers.SerializerMethodField(
         method_name='get_month_cashback'
+    )
+    bank_accounts = serializers.SerializerMethodField(
+        method_name='get_user_bank_accounts'
     )
 
     class Meta:
@@ -25,6 +33,7 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
             'phone',
             'subscriptions_count',
             'month_cashback',
+            'accounts',
         )
 
     def get_subscriptions_count(self, obj: User):
@@ -32,6 +41,13 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
 
     def get_month_cashback(self, obj: User):
         return obj.get_month_cashback
+
+    def get_user_bank_accounts(self, obj) -> list[dict[str, str]]:
+        # It`s mock function, not for production
+        return UserBankAccountSerializer(
+            obj.get_user_bank_accounts,
+            many=True
+        ).data
 
 
 class UserCashbackHistoryInputSerializer(serializers.ModelSerializer):

@@ -143,3 +143,22 @@ class User(AbstractUser):
             created_at__month=datetime.now().month
         ).aggregate(cashback=Sum('amount')).get('cashback')
         return cashback or 0
+
+    @property
+    def get_user_bank_accounts(self) -> list[dict]:
+        # It`s mock function, not for production
+        mock_data = [
+            {
+                'name': 'Платежный счет',
+                'number': '40817810399910005678'
+            },
+            {
+                'name': 'Накопительный счет',
+                'number': '40817840599910002345'
+            },
+            {
+                'name': 'Зарплатный счет',
+                'number': '40817810099910004312'
+            }
+        ]
+        return mock_data
