@@ -118,9 +118,13 @@ class UserSubscriptionUpdateInputSerializer(serializers.ModelSerializer):
 
 
 class SubscriptionBaseReadOutputSerializer(serializers.ModelSerializer):
+    cashback = CashbackReadOutputSerializer()
     category = CategoryReadOutputSerializer()
     subscription_benefits = serializers.SerializerMethodField(
         method_name='get_subscription_benefits'
+    )
+    is_liked = serializers.SerializerMethodField(
+        method_name='get_is_liked'
     )
 
     class Meta:
@@ -134,7 +138,9 @@ class SubscriptionBaseReadOutputSerializer(serializers.ModelSerializer):
             'description',
             'is_recommended',
             'category',
+            'cashback',
             'subscription_benefits',
+            'is_liked',
         )
 
     @staticmethod
@@ -145,14 +151,18 @@ class SubscriptionBaseReadOutputSerializer(serializers.ModelSerializer):
             many=True
         ).data
 
+    def get_is_liked(self, obj: Subscription):
+        request = self.context.get('request')
+        if not request:
+            return True
+        return obj.subscription_favourite.filter(
+            client=request.user,
+        ).exists()
+
 
 class SubscriptionReadOutputSerializer(SubscriptionBaseReadOutputSerializer):
-    cashback = CashbackReadOutputSerializer()
     tariffs = serializers.SerializerMethodField(
         method_name='get_tariffs'
-    )
-    is_liked = serializers.SerializerMethodField(
-        method_name='get_is_liked'
     )
 
     class Meta:
@@ -176,14 +186,6 @@ class SubscriptionReadOutputSerializer(SubscriptionBaseReadOutputSerializer):
     def get_tariffs(obj):
         tarrifs = Tariff.objects.filter(subscription_id=obj.id)
         return TariffReadOutputSerializer(tarrifs, many=True).data
-
-    def get_is_liked(self, obj: Subscription):
-        request = self.context.get('request')
-        if not request:
-            return True
-        return obj.subscription_favourite.filter(
-            client=request.user,
-        ).exists()
 
 
 class InvoiceReadOutputSerializer(serializers.ModelSerializer):
