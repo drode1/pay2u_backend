@@ -9,6 +9,7 @@ from app.users.models import User
 class UserBankAccountSerializer(serializers.Serializer):
     name = serializers.CharField()
     number = serializers.CharField()
+    balance = serializers.IntegerField()
 
 
 class UserReadOutputSerializer(serializers.ModelSerializer):
