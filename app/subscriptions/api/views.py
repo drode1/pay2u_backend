@@ -17,11 +17,13 @@ from app.subscriptions.models import Category, Favourite, Subscription
 
 
 class CategoryListApiView(ListApiView):
+    """List of subscription categories"""
     queryset = Category.objects.without_trashed()
     serializer_class = CategoryReadOutputSerializer
 
 
 class SubscriptionListApiView(ListApiView):
+    """List of available subscriptions"""
     queryset = Subscription.objects.without_trashed()
     serializer_class = SubscriptionReadOutputSerializer
     filter_backends = (
@@ -43,11 +45,13 @@ class SubscriptionListApiView(ListApiView):
 
 
 class DetailSubscriptionApiView(RetrieveApiView):
+    """Detail view of one subscription"""
     queryset = Subscription.objects.without_trashed()
     serializer_class = SubscriptionReadOutputSerializer
 
 
 class FavouriteListApiView(ListApiView):
+    """List of user`s favourite subscriptions"""
     serializer_class = FavouriteOutputSerializer
 
     def get_queryset(self):
@@ -56,6 +60,7 @@ class FavouriteListApiView(ListApiView):
 
 
 class FavouriteCreateApiView(CreateApiView):
+    """Mark subscription as favourite"""
     serializer_class = FavouriteInputSerializer
     response_serializer_class = FavouriteOutputSerializer
 
@@ -65,6 +70,7 @@ class FavouriteCreateApiView(CreateApiView):
 
 
 class FavouriteDestroyApiView(DestroyApiView):
+    """Unmark subscription as favourite"""
     serializer_class = FavouriteInputSerializer
 
     def get_object(self):

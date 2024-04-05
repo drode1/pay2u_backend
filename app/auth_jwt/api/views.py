@@ -8,6 +8,10 @@ from app.core.services import get_tokens_for_user, get_user_by_id
 
 
 class TokenCreateView(CreateApiView):
+    """
+    Get user token by id.
+    In the production environment, needs to be changed the authorization by user data
+    """
     permission_classes = (AllowAny,)
     serializer_class = TokenInputSerializer
 

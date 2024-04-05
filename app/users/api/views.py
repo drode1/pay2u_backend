@@ -1,4 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema
 from rest_framework.generics import get_object_or_404
 
 from app.core.api.generics import (
@@ -28,6 +29,7 @@ from app.users.models import User
 
 
 class DetailUserApi(RetrieveApiView):
+    """Detail user"""
     serializer_class = UserReadOutputSerializer
 
     def get_object(self):
@@ -35,6 +37,7 @@ class DetailUserApi(RetrieveApiView):
 
 
 class ListUserSubscriptionsApi(ListApiView):
+    """List of user`s subscriptions"""
     serializer_class = UserSubscriptionOutputSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ('is_active',)
@@ -47,6 +50,7 @@ class ListUserSubscriptionsApi(ListApiView):
 
 
 class ListUserCashbackHistoryApi(ListApiView):
+    """List of user`s cashback history"""
     serializer_class = UserCashbackHistoryOutputSerializer
 
     def get_queryset(self):
@@ -55,7 +59,9 @@ class ListUserCashbackHistoryApi(ListApiView):
         ).order_by('-created_at')
 
 
+@extend_schema(methods=['PUT'], exclude=True)
 class CashbackHistoryUpdateStatusApiView(UpdateApiView):
+    """Update cashback status"""
     serializer_class = UserCashbackHistoryInputSerializer
     response_serializer_class = UserCashbackHistoryOutputSerializer
 
@@ -71,11 +77,14 @@ class CashbackHistoryUpdateStatusApiView(UpdateApiView):
 
 
 class SubscriptionCreateApiView(CreateApiView):
+    """Create new user subscription"""
     queryset = Subscription.objects.without_trashed()
     serializer_class = UserSubscriptionCreteInputSerializer
 
 
+@extend_schema(methods=['PUT'], exclude=True)
 class SubscriptionUpdateApiView(UpdateApiView):
+    """Update subscription information"""
     serializer_class = UserSubscriptionUpdateInputSerializer
 
     def get_object(self):
@@ -90,6 +99,7 @@ class SubscriptionUpdateApiView(UpdateApiView):
 
 
 class SubscriptionCancelApiView(SoftDestroyApiView):
+    """Update subscription information"""
     serializer_class = UserSubscriptionOutputSerializer
 
     def get_object(self):

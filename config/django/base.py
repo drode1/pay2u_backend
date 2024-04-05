@@ -22,6 +22,7 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'phonenumber_field',
     'django_filters',
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = [
