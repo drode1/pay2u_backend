@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from app.subscriptions.api.serializers import SubscriptionBaseReadOutputSerializer
+from app.subscriptions.api.serializers import (
+    SubscriptionBaseReadOutputSerializer
+)
 from app.subscriptions.models import ClientCashbackHistory
 from app.subscriptions.services import update_cashback_history_status
 from app.users.models import User
@@ -37,10 +39,10 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
             'bank_accounts',
         )
 
-    def get_subscriptions_count(self, obj: User):
+    def get_subscriptions_count(self, obj: User) -> int:
         return obj.get_active_subscriptions_count
 
-    def get_month_cashback(self, obj: User):
+    def get_month_cashback(self, obj: User) -> int:
         return obj.get_month_cashback
 
     def get_user_bank_accounts(self, obj) -> list[dict[str, str]]:
@@ -83,10 +85,11 @@ class UserCashbackHistoryOutputSerializer(serializers.ModelSerializer):
             'created_at',
         )
 
-    def get_invoice_id(self, obj):
+    def get_invoice_id(self, obj) -> int:
         return obj.client_subscription.invoice.id
 
-    def get_subscription(self, obj):
+    def get_subscription(self, obj) -> SubscriptionBaseReadOutputSerializer:
         return SubscriptionBaseReadOutputSerializer(
-            obj.client_subscription.subscription, many=False
+            obj.client_subscription.subscription,
+            many=False
         ).data

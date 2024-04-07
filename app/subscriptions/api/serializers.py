@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from app.subscriptions.api.exceptions import CurrentUserSubscriptionExists
@@ -144,21 +145,19 @@ class SubscriptionBaseReadOutputSerializer(serializers.ModelSerializer):
             'is_liked',
         )
 
-    @staticmethod
-    def get_subscription_benefits(obj):
+    @extend_schema_field(SubscriptionBenefitsReadOutputSerializer(many=True))
+    def get_subscription_benefits(self, obj):
         benefits = SubscriptionBenefits.objects.filter(subscription_id=obj.id)
         return SubscriptionBenefitsReadOutputSerializer(
             benefits,
             many=True
         ).data
 
-    def get_is_liked(self, obj: Subscription):
+    def get_is_liked(self, obj: Subscription) -> bool:
         request = self.context.get('request')
-        if not request:
-            return True
-        return obj.subscription_favourite.filter(
-            client=request.user,
-        ).exists()
+        return (obj.subscription_favourite.filter(
+            client=request.user
+        ).exists() if request else True)
 
 
 class SubscriptionReadOutputSerializer(SubscriptionBaseReadOutputSerializer):
@@ -184,8 +183,8 @@ class SubscriptionReadOutputSerializer(SubscriptionBaseReadOutputSerializer):
             'is_liked',
         )
 
-    @staticmethod
-    def get_tariffs(obj):
+    @extend_schema_field(TariffReadOutputSerializer(many=True))
+    def get_tariffs(self, obj):
         tarrifs = Tariff.objects.filter(subscription_id=obj.id)
         return TariffReadOutputSerializer(tarrifs, many=True).data
 
@@ -222,7 +221,7 @@ class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
             'deleted_at',
         )
 
-    def get_cashback_amount(self, obj):
+    def get_cashback_amount(self, obj) -> int:
         return calculate_cashback_amount(
             obj.tariff.amount,
             obj.subscription.cashback.amount
