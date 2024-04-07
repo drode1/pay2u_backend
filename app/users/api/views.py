@@ -108,4 +108,5 @@ class SubscriptionCancelApiView(SoftDestroyApiView):
             'client': self.request.user
         }
         instance = get_object_or_404(ClientSubscription, **filters)
+        instance.is_auto_pay = False
         return instance
