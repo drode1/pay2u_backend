@@ -14,6 +14,8 @@ Credential for admin panel:
 
 API Schema - [Swagger](https://pay2u.eremezov.com/api/v1/docs/swagger/)
 
+[Swagger screenshots](https://disk.yandex.ru/i/lGKYyy2ZZAlG5w)
+
 ## Stack
 
 ![python version](https://img.shields.io/badge/Python-3.11+-blue)
