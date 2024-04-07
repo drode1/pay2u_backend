@@ -65,6 +65,7 @@ class SubscriptionFactory(django.DjangoModelFactory):
         )
     )
     description = Faker('sentence')
+    conditions = Faker('sentence')
     cashback = fuzzy.FuzzyChoice(
         Cashback.objects.all(),
         getter=lambda c: c

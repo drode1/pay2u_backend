@@ -211,6 +211,11 @@ class Subscription(BaseModel):
         null=False,
         blank=False,
     )
+    conditions = models.TextField(
+        'Conditions',
+        null=True,
+        blank=True,
+    )
     cashback = models.ForeignKey(
         Cashback,
         verbose_name='Cashback',

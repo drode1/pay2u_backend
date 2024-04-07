@@ -223,6 +223,7 @@ class SubscriptionAdmin(BaseAdminModel):
                         'popularity',
                         'name',
                         'description',
+                        'conditions',
                     ),
                     'image_preview',
                     'image_detail',
