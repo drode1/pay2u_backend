@@ -18,7 +18,6 @@ LOCAL_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
-    'django_json_widget',
     'corsheaders',
     'phonenumber_field',
     'django_filters',

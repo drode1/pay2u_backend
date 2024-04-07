@@ -1,8 +1,6 @@
 from django.contrib import admin, messages
-from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ngettext
-from django_json_widget.widgets import JSONEditorWidget
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
@@ -46,6 +44,7 @@ def recover_object(modeladmin, request, queryset):
         messages.SUCCESS
     )
 
+
 class IsDeletedAdminFilter(admin.SimpleListFilter):
     title = 'Deleted'
     parameter_name = 'is_deleted'
@@ -76,7 +75,6 @@ class BaseAdminModel(admin.ModelAdmin):
     list_filter = (IsDeletedAdminFilter,)
 
     formfield_overrides = {
-        models.JSONField: {'widget': JSONEditorWidget},
         PhoneNumberField: {'widget': PhoneNumberPrefixWidget},
     }
 
