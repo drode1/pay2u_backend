@@ -1,7 +1,8 @@
 from django_filters import rest_framework as rf
 
 
-class IsDeletedFilter(rf.FilterSet):
+class ClientSubscriptionFilter(rf.FilterSet):
+    is_active = rf.BooleanFilter(field_name='is_active')
     is_deleted = rf.BooleanFilter(
         method='is_deleted_filter',
         field_name='deleted_at'
