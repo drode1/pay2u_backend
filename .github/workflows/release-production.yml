@@ -83,7 +83,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ./projects/pay2u_backend/
+            cd ${{ secrets.SERVER_FOLDER_PATH }}
             sudo docker compose down
             sudo docker compose rm django
             sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/pay2u_backend
