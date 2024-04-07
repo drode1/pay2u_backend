@@ -16,7 +16,7 @@ services:
       interval: 10s
       timeout: 3s
       retries: 3
-    container_name: postgres
+    container_name: pay2u-postgres
     networks:
       - default
 
@@ -30,7 +30,7 @@ services:
       - ./.env
     depends_on:
       - postgres
-    container_name: django
+    container_name: pay2u-django
     networks:
       - default
 
@@ -43,7 +43,7 @@ services:
       - ./media/:/var/www/html/app/media/
     depends_on:
       - django
-    container_name: nginx
+    container_name: pay2u-nginx
     networks:
       - default
 
