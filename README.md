@@ -21,7 +21,19 @@ API Schema - [Swagger](https://pay2u.eremezov.com/api/v1/docs/swagger/)
 ![djangorestframework version](https://img.shields.io/badge/DRF-3.14-951d12)
 ![poetry](https://img.shields.io/pypi/v/poetry?label=Poetry)
 
-The other dependencies are specified in the file `pyproject.toml`
+### Other dependencies
+The other dependencies are specified in the file `pyproject.toml` and the list of them under this text
+- `python-dotenv` - for env variables
+- `psycopg2-binary` - to connect django with postgres
+- `django-cors-headers` - for cors settings
+- `gunicorn` - as a python webserver
+- `djangorestframework-simplejwt` - to obtain JWT user token
+- `django-phonenumber-field` & `babel` - to provide phone validation in user
+- `pillow` - for managing images
+- `django-filter` - to filter entities
+- `drf-spectacular` - for swagger & OpenAPI documentation
+- `pre-commit` & `ruff` - to maintain clean code
+- `factory-boy` - to generate fake data
 
 ## Development
 
@@ -34,14 +46,14 @@ There are two ways of local development
 
 1. cp `.env.example` -> `.env`
 2. Install all scripts via `poetry install`
-3. Then run `pre-commit install` to use pre-commit hook automatically
+3. Then run `pre-commit install` to use pre-commit hook automatically  (if needed)
 4. Run `make migrate` to update DB schema
 5. Run `make seed` if you need fake data
 
 ### Docker
 
 1. cp `.env.example` -> `.env`
-2. Then run `pre-commit install` to use pre-commit hook automatically
+2. Then run `pre-commit install` to use pre-commit hook automatically (if needed)
 3. Run `docker compose up -d`
 4. Open your docker Django container and run:
     - Run `make migrate` to update DB schema
