@@ -8,6 +8,6 @@ def get_user_by_id(user_id: int) -> User:
     return get_object_or_404(User, id=user_id)
 
 
-def get_tokens_for_user(user: User) -> tuple[Token, Token]:
+def get_tokens_for_user(user: User) -> tuple[str, str]:
     refresh = RefreshToken.for_user(user)
-    return refresh, refresh.access_token
+    return str(refresh), str(refresh.access_token)

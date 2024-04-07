@@ -7,3 +7,8 @@ class TokenInputSerializer(serializers.Serializer):
         required=True,
         min_value=1
     )
+
+
+class TokenOutputSerializer(serializers.Serializer):
+    refresh_token = serializers.CharField()
+    access_token = serializers.CharField()
