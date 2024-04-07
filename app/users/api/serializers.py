@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from app.subscriptions.api.serializers import (
@@ -45,7 +46,8 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
     def get_month_cashback(self, obj: User) -> int:
         return obj.get_month_cashback
 
-    def get_user_bank_accounts(self, obj) -> list[dict[str, str]]:
+    @extend_schema_field(UserBankAccountSerializer(many=True))
+    def get_user_bank_accounts(self, obj) -> list[UserBankAccountSerializer]:
         # It`s mock function, not for production
         return UserBankAccountSerializer(
             obj.get_user_bank_accounts,
