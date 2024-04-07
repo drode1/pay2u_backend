@@ -22,7 +22,9 @@ API Schema - [Swagger](https://pay2u.eremezov.com/api/v1/docs/swagger/)
 ![poetry](https://img.shields.io/pypi/v/poetry?label=Poetry)
 
 ### Other dependencies
+
 The other dependencies are specified in the file `pyproject.toml` and the list of them under this text
+
 - `python-dotenv` - for env variables
 - `psycopg2-binary` - to connect django with postgres
 - `django-cors-headers` - for cors settings
@@ -46,9 +48,10 @@ There are two ways of local development
 
 1. cp `.env.example` -> `.env`
 2. Install all scripts via `poetry install`
-3. Then run `pre-commit install` to use pre-commit hook automatically  (if needed)
+3. Then run `pre-commit install` to use pre-commit hook automatically (if needed)
 4. Run `make migrate` to update DB schema
 5. Run `make seed` if you need fake data
+6. Run `make collectstatic` to collect static files
 
 ### Docker
 
@@ -58,6 +61,7 @@ There are two ways of local development
 4. Open your docker Django container and run:
     - Run `make migrate` to update DB schema
     - Run `make seed` if you need fake data
+5. Run `make collectstatic` to collect static files
 
 ## Authors
 
