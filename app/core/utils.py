@@ -15,4 +15,3 @@ def recover_object(obj) -> None:
     obj.deleted_at = None
     obj.save(update_fields=['deleted_at'])
 
-    return None

@@ -1,5 +1,4 @@
-from datetime import datetime as dt
-from datetime import timedelta
+import datetime
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -50,11 +49,14 @@ def validate_tariff_subscription(
     return tariffs
 
 
-def calculate_expiration_date(tariff_days_amount) -> dt:
-    return dt.now() + timedelta(days=tariff_days_amount)
+def calculate_expiration_date(tariff_days_amount: int) -> datetime:
+    return (datetime.datetime.now(tz=datetime.UTC)
+            + datetime.timedelta(days=tariff_days_amount))
 
 
-def renew_client_subscription(client_subscription) -> ClientSubscription:
+def renew_client_subscription(
+        client_subscription: ClientSubscription
+) -> ClientSubscription:
     promocode = Promocode.objects.create()  # Create new promocode
     new_subscription = client_subscription.__class__.objects.create(
         client=client_subscription.client,
@@ -79,7 +81,7 @@ def renew_client_subscription(client_subscription) -> ClientSubscription:
 def inactivate_or_renew_user_subscription(
         client_subscription: ClientSubscription
 ) -> ClientSubscription:
-    now = dt.now().date()
+    now = datetime.datetime.now(tz=datetime.UTC).date()
 
     if not client_subscription.is_active:
         return client_subscription
@@ -97,16 +99,19 @@ def inactivate_or_renew_user_subscription(
     return client_subscription
 
 
-def is_current_user_subscription_exists(client, subscription):
+def is_current_user_subscription_exists(
+        client: User,
+        subscription: Subscription
+) -> bool:
     return ClientSubscription.objects.filter(
         client=client,
         subscription=subscription,
         is_active=True,
-        expiration_date__gte=dt.now().date()
+        expiration_date__gte=datetime.datetime.now(tz=datetime.UTC).date()
     ).exists()
 
 
-def create_new_user_subscription(data: dict):
+def create_new_user_subscription(data: dict) -> ClientSubscription:
     tariff: Tariff = data.get('tariff')
     account = data.get('charge_account')
     subscription: Subscription = data.get('subscription')
@@ -123,20 +128,24 @@ def create_new_user_subscription(data: dict):
         data.get('is_auto_pay'),
     )
 
-    set_client_cashback(client, new_subscription, subscription.cashback.amount,
-                        payment_amount)
+    set_client_cashback(
+        client,
+        new_subscription,
+        subscription.cashback.amount,
+        payment_amount
+    )
 
     return new_subscription
 
 
 @transaction.atomic
 def create_subscription(
-        subscription,
-        tariff,
-        client,
-        payment_amount,
-        is_auto_pay=False,
-):
+        subscription: Subscription,
+        tariff: Tariff,
+        client: User,
+        payment_amount: int,
+        is_auto_pay: bool = False,
+) -> ClientSubscription:
     promocode = Promocode.objects.create()  # Create new promocode
     new_invoice = create_invoice_with_tariff_amount(payment_amount)
     new_subscription = ClientSubscription.objects.create(
@@ -152,22 +161,22 @@ def create_subscription(
     return new_subscription
 
 
-def process_payment(account: int, amount: int):
+def process_payment(account: int, amount: int) -> bool:
     try:
         # Fake processing payment function
         charge_money(account, amount)
     except PaymentException as err:
         raise PaymentException from err
-    except Exception as e:
-        raise e
+    except Exception:  # noqa: BLE001
+        raise Exception  # noqa: TRY002
     return True
 
 
-def charge_money(account: int, amount: int):
+def charge_money(account: int, amount: int) -> None:  # noqa: ARG001
     ...
 
 
-def calculate_cashback_amount(amount: int, percent: int):
+def calculate_cashback_amount(amount: int, percent: int) -> int:
     return (amount * percent) // 100
 
 
@@ -186,13 +195,11 @@ def set_client_cashback(
         client_subscription=subscription
     )
 
-    return None
-
 
 def update_cashback_history_status(
         instance: ClientCashbackHistory,
         status: enums.CashbackHistoryStatus.choices
-):
+) -> None:
     if instance.status != enums.CashbackHistoryStatus.PENDING.value:
         raise WrongCashbackStatusException
     instance.status = status

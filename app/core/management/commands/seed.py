@@ -66,8 +66,8 @@ class Command(BaseCommand):
         try:
             self.clean_db(self.MODELS)
             self.seed_data(self.FACTORIES)
-        except Exception as e:
-            logger.error(f'An error occurred during data generation: {e}')
-            raise e
+        except Exception:
+            logger.exception('An error occurred during data generation')
+            raise Exception # noqa: TRY002
         else:
             logger.info('Test data generation was successful.')

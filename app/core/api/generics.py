@@ -12,13 +12,9 @@ from app.core.api.mixins import (
 class ListApiView(generics.ListAPIView):
     """ Abstract generic List API class """
 
-    pass
-
 
 class RetrieveApiView(generics.RetrieveAPIView):
     """ Abstract generic Retrieve API class """
-
-    pass
 
 
 class CreateApiView(CreateModelMixin, generics.CreateAPIView):
@@ -39,8 +35,6 @@ class UpdateApiView(UpdateModelMixin, generics.UpdateAPIView):
 
 class DestroyApiView(generics.DestroyAPIView):
     """ Abstract generic Destroy API class """
-
-    pass
 
 
 class SoftDestroyApiView(SoftDestroyModelMixin, generics.GenericAPIView):

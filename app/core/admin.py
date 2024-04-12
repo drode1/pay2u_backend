@@ -1,12 +1,22 @@
+from typing import Any, Protocol, Sequence, Type
+
 from django.contrib import admin, messages
+from django.db import models
+from django.http import HttpRequest
 from django.utils.timezone import now
 from django.utils.translation import ngettext
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 
+class DjangoModelAdminProtocol(Protocol):
+
+    @property
+    def add_fieldsets(self) -> Sequence[tuple[str | None, Any]]: ...
+
+
 @admin.action(description='Delete')
-def make_object_deleted_at(modeladmin, request, queryset):
+def make_object_deleted_at(modeladmin, request, queryset) -> None:
     updated = queryset.update(deleted_at=now())
 
     message = ngettext(
@@ -80,5 +90,20 @@ class BaseAdminModel(admin.ModelAdmin):
 
     readonly_fields = ('created_at', 'updated_at',)
 
-    def has_delete_permission(self, request, obj=None):
-        return False if self.soft_delete else True
+    def get_fieldsets(
+            self: DjangoModelAdminProtocol,
+            request: HttpRequest,
+            obj: Type[models.Model] | None = None
+    ) -> Any:
+        if (not obj and hasattr(self, 'add_fieldsets')
+                and self.add_fieldsets is not None):
+            return self.add_fieldsets
+
+        return super().get_fieldsets(request, obj)  # type: ignore
+
+    def has_delete_permission(
+            self,
+            request: HttpRequest,
+            obj: Type[models.Model] | None = None
+    ):
+        return not bool(self.soft_delete)

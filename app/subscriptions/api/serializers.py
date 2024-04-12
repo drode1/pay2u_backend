@@ -1,3 +1,5 @@
+from typing import Any
+
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
@@ -84,7 +86,7 @@ class UserSubscriptionCreteInputSerializer(serializers.ModelSerializer):
             'client',
         )
 
-    def validate(self, attrs):
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         subscription: Subscription = attrs.get('subscription')
         tariff: Tariff = attrs.get('tariff')
         client: User = attrs.get('client')
@@ -99,7 +101,7 @@ class UserSubscriptionCreteInputSerializer(serializers.ModelSerializer):
 
         return attrs
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict[str, Any]) -> dict[str, Any]:
         create_new_user_subscription(validated_data)
         return validated_data
 
@@ -146,7 +148,7 @@ class SubscriptionBaseReadOutputSerializer(serializers.ModelSerializer):
         )
 
     @extend_schema_field(SubscriptionBenefitsReadOutputSerializer(many=True))
-    def get_subscription_benefits(self, obj):
+    def get_subscription_benefits(self, obj: Subscription) -> dict:
         benefits = SubscriptionBenefits.objects.filter(subscription_id=obj.id)
         return SubscriptionBenefitsReadOutputSerializer(
             benefits,
@@ -184,7 +186,7 @@ class SubscriptionReadOutputSerializer(SubscriptionBaseReadOutputSerializer):
         )
 
     @extend_schema_field(TariffReadOutputSerializer(many=True))
-    def get_tariffs(self, obj):
+    def get_tariffs(self, obj: Subscription) -> dict:
         tarrifs = Tariff.objects.filter(subscription_id=obj.id)
         return TariffReadOutputSerializer(tarrifs, many=True).data
 
@@ -221,7 +223,7 @@ class UserSubscriptionOutputSerializer(serializers.ModelSerializer):
             'deleted_at',
         )
 
-    def get_cashback_amount(self, obj) -> int:
+    def get_cashback_amount(self, obj: ClientSubscription) -> int:
         return calculate_cashback_amount(
             obj.tariff.amount,
             obj.subscription.cashback.amount

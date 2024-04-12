@@ -113,8 +113,3 @@ class UserAdmin(BaseAdminModel):
             }
         ),
     )
-
-    def get_fieldsets(self, request, obj=None):
-        if not obj:
-            return self.add_fieldsets
-        return self.fieldsets

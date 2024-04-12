@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from pathlib import Path
 
 from config.env import APPS_DIR
@@ -8,7 +8,7 @@ LOG_DIR = Path(APPS_DIR) / 'logs'
 if not Path.exists(LOG_DIR):
     Path.mkdir(LOG_DIR, parents=True)
 
-LOG_FILE_NAME = f'log-{datetime.today().strftime("%Y-%m-%d")}.log'
+LOG_FILE_NAME = f'log-{datetime.datetime.now(tz=datetime.UTC).strftime("%Y-%m-%d")}.log'
 
 LOGGING = {
     'version': 1,

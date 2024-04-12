@@ -37,18 +37,18 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-    @property
-    def is_deleted(self):
-        return True if self.deleted_at else False
+    def __str__(self) -> str:
+        return str(self.id)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'{self.__class__.__name__} {self.id}'
 
-    def __str__(self):
-        return self.id
+    @property
+    def is_deleted(self) -> bool:
+        return bool(self.deleted_at)
 
-    def soft_delete(self):
+    def soft_delete(self) -> None:
         return soft_delete_object(self)
 
-    def recover(self):
+    def recover(self) -> None:
         return recover_object(self)

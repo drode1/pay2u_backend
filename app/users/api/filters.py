@@ -1,3 +1,6 @@
+from typing import Any
+
+from django.db.models import QuerySet
 from django_filters import rest_framework as rf
 
 
@@ -8,7 +11,12 @@ class ClientSubscriptionFilter(rf.FilterSet):
         field_name='deleted_at'
     )
 
-    def is_deleted_filter(self, queryset, name, value):
+    def is_deleted_filter(
+            self,
+            queryset: QuerySet,
+            name: Any,
+            value: str
+    ) -> QuerySet:
         if value:
             return queryset.filter(deleted_at__isnull=False)
         return queryset.filter(deleted_at__isnull=True)

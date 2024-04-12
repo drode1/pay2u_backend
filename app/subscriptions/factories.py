@@ -1,3 +1,5 @@
+from typing import Any
+
 from factory import Faker, Iterator, SubFactory, django, fuzzy, lazy_attribute
 
 from app.subscriptions.enums import SubscriptionPeriod
@@ -132,7 +134,7 @@ class ClientSubscriptionFactory(django.DjangoModelFactory):
     is_auto_pay = Faker('pybool', truth_probability=20)
 
     @lazy_attribute
-    def tariff(self):
+    def tariff(self) -> Any:
         # Get list of tariffs which linked to concrete subscription
         tariffs = Tariff.objects.filter(subscription=self.subscription)
         if tariffs.exists():

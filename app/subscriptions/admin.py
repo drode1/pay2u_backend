@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.http import HttpRequest
 
 from app.core.admin import BaseAdminModel, IsDeletedAdminFilter
 from app.subscriptions.models import (
@@ -118,13 +119,21 @@ class InvoiceAdmin(BaseAdminModel):
         ),
     )
 
-    def has_change_permission(self, request, obj=None):
+    def has_change_permission(
+            self,
+            request: HttpRequest,
+            obj: Invoice | None = None
+    ) -> bool:
         return False
 
-    def has_add_permission(self, request):
+    def has_add_permission(self, request: HttpRequest) -> bool:
         return False
 
-    def has_delete_permission(self, request, obj=None):
+    def has_delete_permission(
+            self,
+            request: HttpRequest,
+            obj: Invoice | None = None
+    ) -> bool:
         return False
 
 
@@ -166,10 +175,14 @@ class PromocodeAdmin(BaseAdminModel):
         ),
     )
 
-    def has_change_permission(self, request, obj=None):
+    def has_change_permission(
+            self,
+            request: HttpRequest,
+            obj: Promocode | None = None
+    ) -> bool:
         return False
 
-    def has_add_permission(self, request):
+    def has_add_permission(self, request: HttpRequest) -> bool:
         return False
 
 
@@ -368,5 +381,5 @@ class ClientSubscriptionAdmin(BaseAdminModel):
         ),
     )
 
-    def has_add_permission(self, request):
+    def has_add_permission(self, request: HttpRequest) -> bool:
         return False

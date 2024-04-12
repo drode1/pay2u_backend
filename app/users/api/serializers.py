@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from app.subscriptions.api.serializers import (
-    SubscriptionBaseReadOutputSerializer
+    SubscriptionBaseReadOutputSerializer,
 )
 from app.subscriptions.models import ClientCashbackHistory
 from app.subscriptions.services import update_cashback_history_status
@@ -47,7 +47,9 @@ class UserReadOutputSerializer(serializers.ModelSerializer):
         return obj.get_month_cashback
 
     @extend_schema_field(UserBankAccountSerializer(many=True))
-    def get_user_bank_accounts(self, obj) -> list[UserBankAccountSerializer]:
+    def get_user_bank_accounts(
+            self, obj: User
+    ) -> list[UserBankAccountSerializer]:
         # It`s mock function, not for production
         return UserBankAccountSerializer(
             obj.get_user_bank_accounts,
@@ -62,7 +64,11 @@ class UserCashbackHistoryInputSerializer(serializers.ModelSerializer):
             'status',
         )
 
-    def update(self, instance, validated_data):
+    def update(
+            self,
+            instance: ClientCashbackHistory,
+            validated_data: dict,
+    ) -> ClientCashbackHistory:
         update_cashback_history_status(instance, validated_data.get('status'))
         return instance
 
@@ -87,10 +93,13 @@ class UserCashbackHistoryOutputSerializer(serializers.ModelSerializer):
             'created_at',
         )
 
-    def get_invoice_id(self, obj) -> int:
+    def get_invoice_id(self, obj: ClientCashbackHistory) -> int:
         return obj.client_subscription.invoice.id
 
-    def get_subscription(self, obj) -> SubscriptionBaseReadOutputSerializer:
+    def get_subscription(
+            self,
+            obj: ClientCashbackHistory
+    ) -> SubscriptionBaseReadOutputSerializer:
         return SubscriptionBaseReadOutputSerializer(
             obj.client_subscription.subscription,
             many=False

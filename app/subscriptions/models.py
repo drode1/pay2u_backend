@@ -1,6 +1,7 @@
+import datetime
 import secrets
 import string
-from datetime import datetime, timedelta
+from typing import Any
 
 from django.conf import settings as s
 from django.core.validators import (
@@ -33,10 +34,10 @@ class Category(BaseModel):
             'name',
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Category {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -67,10 +68,10 @@ class Cashback(BaseModel):
                 name='min_max_range'),
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Cashback {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.amount)
 
 
@@ -99,15 +100,16 @@ class Invoice(BaseModel):
             'date',
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Invoice {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.id}'
 
 
 class Promocode(BaseModel):
     """Activation subscription code model"""
+
     name = models.CharField(
         'Name',
         blank=False,
@@ -131,13 +133,13 @@ class Promocode(BaseModel):
             'is_active',
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Promocode {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: dict) -> None:
         if not self.pk:
             # Generate random activate code with 6 symbols
             code_length = 6
@@ -151,7 +153,7 @@ class Promocode(BaseModel):
                     break
         super().save(*args, **kwargs)
 
-    def activate(self):
+    def activate(self) -> None:
         """
         Activate subscription promocode and deactivate if for further
         activation possibilities
@@ -193,10 +195,10 @@ class SubscriptionBenefits(BaseModel):
             'id',
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Subscription benefit {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.id)
 
 
@@ -213,7 +215,6 @@ class Subscription(BaseModel):
     )
     conditions = models.TextField(
         'Conditions',
-        null=True,
         blank=True,
     )
     cashback = models.ForeignKey(
@@ -268,13 +269,13 @@ class Subscription(BaseModel):
             'is_recommended',
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Subscription {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def calculate_popularity(self):
+    def calculate_popularity(self) -> None:
         count = self.subscription_client_subscription.count()
         if count > 0:
             self.popularity = count * self.id * 10
@@ -314,10 +315,10 @@ class Favourite(BaseModel):
             ),
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Favourite {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.id)
 
 
@@ -361,15 +362,15 @@ class Tariff(BaseModel):
             'amount',
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Tariff {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.id)
 
     @property
-    def name(self):
-        return SubscriptionPeriod(self.days_amount).label
+    def name(self) -> str:
+        return str(SubscriptionPeriod(self.days_amount).label)
 
 
 class ClientSubscription(BaseModel):
@@ -409,7 +410,7 @@ class ClientSubscription(BaseModel):
         'expiration_date',
         null=False,
         blank=False,
-        default=datetime.now() + timedelta(
+        default=datetime.datetime.now(tz=datetime.UTC) + datetime.timedelta(
             days=int(SubscriptionPeriod.ONE_MONTH)
         )
     )
@@ -448,19 +449,19 @@ class ClientSubscription(BaseModel):
             'is_active',
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Client subscription {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.id)
 
-    def check_subscription_period(self):
+    def check_subscription_period(self) -> None:
         from app.subscriptions.services import (
             inactivate_or_renew_user_subscription,
         )
         inactivate_or_renew_user_subscription(self)
 
-    def clean(self):
+    def clean(self) -> None:
         super().clean()
 
         """
@@ -523,8 +524,8 @@ class ClientCashbackHistory(BaseModel):
             'status',
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Client cashback {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.id)

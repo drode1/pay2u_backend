@@ -15,7 +15,7 @@ class IdRelatedFieldSerializer(PrimaryKeyRelatedField):
         queryset = self.get_queryset()
         try:
             if isinstance(data, bool):
-                raise TypeError
+                raise TypeError  # noqa: TRY301
             return queryset.get(pk=data).pk
         except ObjectDoesNotExist:
             self.fail('does_not_exist', pk_value=data)

@@ -1,10 +1,11 @@
-from datetime import datetime
+import datetime
+from typing import Any
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import Sum
+from django.db.models import QuerySet, Sum
 from phonenumber_field.modelfields import PhoneNumberField
 
 from app.core.utils import recover_object, soft_delete_object
@@ -12,7 +13,12 @@ from config.django.base import MAX_NAME_LENGTH
 
 
 class CustomUserManager(BaseUserManager):
-    def _create_user(self, email, password, **extra_fields):
+    def _create_user(
+            self,
+            email: str | None = None,
+            password: str | None = None,
+            **extra_fields: Any
+    ) -> 'User':
         if not email:
             raise ValueError('The Email must be set')
         email = self.normalize_email(email)
@@ -22,12 +28,22 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email=None, password=None, **extra_fields):
+    def create_user(
+            self,
+            email: str | None = None,
+            password: str | None = None,
+            **extra_fields: Any
+    ) -> 'User':
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password, **extra_fields)
 
-    def create_superuser(self, email=None, password=None, **extra_fields):
+    def create_superuser(
+            self,
+            email: str | None = None,
+            password: str | None = None,
+            **extra_fields: Any
+    ) -> 'User':
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -105,27 +121,27 @@ class User(AbstractUser):
             'email',
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'User {self.id}'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.first_name} {self.last_name}'
 
-    def soft_delete(self):
+    def soft_delete(self) -> None:
         return soft_delete_object(self)
 
-    def recover(self):
+    def recover(self) -> None:
         return recover_object(self)
 
     @property
-    def is_deleted(self):
-        return True if self.deleted_at else False
+    def is_deleted(self) -> bool:
+        return bool if self.deleted_at else False
 
     @property
-    def full_name(self):
+    def full_name(self) -> str:
         return f'{self.first_name} {self.patronymic} {self.last_name}'
 
-    def get_active_subscriptions(self):
+    def get_active_subscriptions(self) -> QuerySet:
         from app.subscriptions.models import ClientSubscription
 
         return ClientSubscription.objects.filter(
@@ -134,13 +150,13 @@ class User(AbstractUser):
         )
 
     @property
-    def get_active_subscriptions_count(self):
+    def get_active_subscriptions_count(self) -> int:
         return self.get_active_subscriptions().count()
 
     @property
-    def get_month_cashback(self):
+    def get_month_cashback(self) -> int:
         cashback = self.client_cashback_history.filter(
-            created_at__month=datetime.now().month
+            created_at__month=datetime.datetime.now(tz=datetime.UTC).month
         ).aggregate(cashback=Sum('amount')).get('cashback')
         return cashback or 0
 
