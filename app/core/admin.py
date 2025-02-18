@@ -2,6 +2,7 @@ from typing import Any, Protocol, Sequence, Type
 
 from django.contrib import admin, messages
 from django.db import models
+from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.utils.timezone import now
 from django.utils.translation import ngettext
@@ -36,7 +37,7 @@ def make_object_deleted_at(modeladmin, request, queryset) -> None:
 
 
 @admin.action(description='Recover')
-def recover_object(modeladmin, request, queryset):
+def recover_object(modeladmin, request, queryset) -> None:
     updated = queryset.update(deleted_at=None)
 
     message = ngettext(
@@ -65,7 +66,7 @@ class IsDeletedAdminFilter(admin.SimpleListFilter):
             (0, 'No'),
         )
 
-    def queryset(self, request, queryset):
+    def queryset(self, request, queryset) -> QuerySet:
         if self.value() == '1':
             return queryset.filter(deleted_at__isnull=False)
         elif self.value() == '0':
